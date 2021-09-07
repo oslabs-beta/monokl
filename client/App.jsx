@@ -1,10 +1,10 @@
 import React from "react";
+import Sidebar from './components/Sidebar.jsx';
 
 function App() {
   return (
     <>
-      <h1>I am App Component</h1>
-      <button>Click Me!!!!</button>
+      <Sidebar/>
     </>
   );
 }
