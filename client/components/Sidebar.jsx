@@ -25,14 +25,17 @@ import AlertSettingsIcon from '@material-ui/icons/SettingsApplicationsOutlined';
 
 import ConnectCluster from './ConnectCluster.jsx';
 import ClusterDisplay from './ClusterDisplay.jsx';
+import UnderConstruction from './UnderConstruction.jsx';
 
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
+    minHeight: '100vh'
   },
   appBar: {
+    backgroundColor: '#537791',
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
@@ -77,6 +80,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   toolbar: {
+    backgroundColor: '#537791',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-end',
@@ -85,6 +89,7 @@ const useStyles = makeStyles((theme) => ({
     ...theme.mixins.toolbar,
   },
   content: {
+    // backgroundColor: 'lightgreen',
     flexGrow: 1,
     padding: theme.spacing(3),
     marginTop: '50px'
@@ -132,7 +137,7 @@ export default function Sidebar() {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap>
+          <Typography variant="h5" noWrap>
             Monokl
           </Typography>
         </Toolbar>
@@ -158,7 +163,7 @@ export default function Sidebar() {
           </div>
           <Divider/>
           <List>
-            <ListItem button key={'Connect'} component={Link} to="/connect">
+            <ListItem button key={'Connect'} component={Link} to="/">
               <ListItemIcon>{<ConnectIcon />}</ListItemIcon>
               <ListItemText primary={'Connect'} />
             </ListItem>
@@ -188,11 +193,14 @@ export default function Sidebar() {
           </List>
         </Drawer>
         <main className={classes.content}>
-          <Route exact path="/connect" component={ConnectCluster} />
-          <Route exact path="/health" component={ClusterDisplay} />
+          <Route exact path="/" component={ConnectCluster} />
+          <Route path="/alerts" component={UnderConstruction} />
+          <Route path="/health" component={ClusterDisplay} />
+          <Route path="/system" component={UnderConstruction} />
+          <Route path="/network" component={UnderConstruction} />
+          <Route path="/settings" component={UnderConstruction} />
         </main>
       </HashRouter>
     </div>
   );
 }
-

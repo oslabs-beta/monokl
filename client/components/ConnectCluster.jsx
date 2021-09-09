@@ -29,7 +29,7 @@ export default function ConnectCluster() {
     <form className={classes.root} noValidate autoComplete="off">
       <TextField id="broker" label="Broker Port" type="search" variant="outlined" />
       <TextField id="exporter" label="Exporter Port" type="search" variant="outlined" />
-      <Button className={classes.connect} variant="contained" color="primary" href="#contained-buttons">
+      <Button className={classes.connect} variant="contained" color="#537791" href="#contained-buttons">
         Connect
       </Button>
     </form>
