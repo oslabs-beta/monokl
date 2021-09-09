@@ -3,31 +3,13 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 
-
-// const useStyles = makeStyles((theme) => ({
-//   connect: {
-//     '& > *': {
-//       margin: theme.spacing(1),
-//     },
-//   },
-// }));
-
-// export default function ContainedButtons() {
-//   const classes = useStyles();
-
-//   return (
-//     <div className={classes.root}>
-//     </div>
-//   );
-// }
-
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: '200px',
+    marginTop: '150px',
     '& .MuiTextField-root': {
       margin: theme.spacing(1),
       width: '35ch',

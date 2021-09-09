@@ -24,6 +24,7 @@ import NetworkIcon from '@material-ui/icons/NetworkCheckOutlined';
 import AlertSettingsIcon from '@material-ui/icons/SettingsApplicationsOutlined';
 
 import ConnectCluster from './ConnectCluster.jsx';
+import ClusterDisplay from './ClusterDisplay.jsx';
 
 const drawerWidth = 240;
 
@@ -86,6 +87,7 @@ const useStyles = makeStyles((theme) => ({
   content: {
     flexGrow: 1,
     padding: theme.spacing(3),
+    marginTop: '50px'
   },
   alertSettings:{
     // margin: theme.spacing.unit,
@@ -187,6 +189,7 @@ export default function Sidebar() {
         </Drawer>
         <main className={classes.content}>
           <Route exact path="/connect" component={ConnectCluster} />
+          <Route exact path="/health" component={ClusterDisplay} />
         </main>
       </HashRouter>
     </div>
