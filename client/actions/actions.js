@@ -7,3 +7,10 @@ export const addCountAction = () => {
     payload: 1,
   };
 };
+
+export const addPortAction = (userPort) => {
+  return {
+    type: types.ADD_PORT,
+    payload: userPort,
+  };
+};
