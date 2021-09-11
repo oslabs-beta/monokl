@@ -1,7 +1,8 @@
 import * as types from "../actions/actionTypes.js";
 
 const initialState = {
-  count: 9,
+  count: 0,
+  port: "",
 };
 
 const mainReducer = (state = initialState, action) => {
@@ -11,6 +12,11 @@ const mainReducer = (state = initialState, action) => {
       return {
         ...state,
         count: state.count + action.payload, //should be hardcoded to 1
+      };
+    case types.ADD_PORT:
+      return {
+        ...state,
+        port: action.payload,
       };
 
     default:
