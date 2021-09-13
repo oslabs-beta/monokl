@@ -1,10 +1,11 @@
 import React from "react";
 import { connect } from "react-redux";
-import { addCountAction } from "../actions/actions";
+import { addCountAction, makeFetch } from "../actions/actions";
 
 const mapStateToProps = (state) => {
   return {
     count: state.mainReducer.count,
+    data: state.mainReducer.data,
   };
 };
 
@@ -13,15 +14,32 @@ const mapDistpatchToProps = (dispatch) => {
     addCountAction: () => {
       dispatch(addCountAction);
     },
+    makeFetch: () => {
+      dispatch(makeFetch());
+    },
   };
 };
 
 function UnderConstruction(props) {
+  console.log("Fetch Request: ", props.data);
+  let arrayToRender = [];
+  if (props.data) {
+    props.data.forEach((dataPoint, i) => {
+      arrayToRender.push(
+        <div key={`datapoint${i}`}>{JSON.stringify(dataPoint)}</div>
+      );
+    });
+  }
+
+  console.log("ArraytoRender: ", arrayToRender);
   return (
     <div>
       <h1>This page is currently under construction!</h1>
-      <h5>Items: {props.count} </h5>
+      <h5> Items: {props.count} </h5>
+
       <button onClick={props.addCountAction}>Update Count</button>
+      <button onClick={props.makeFetch}>make Fetch</button>
+      <div> {arrayToRender} </div>
     </div>
   );
 }
