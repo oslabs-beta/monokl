@@ -26,15 +26,6 @@ export default function ClusterDisplay() {
   return (
     <div className={classes.root}>
       <Grid container spacing={3} className={classes.parent}>
-        {/* <Grid item xs={6} className={classes.child}>
-          <Paper className={classes.paper}><ScoreCard data={1} metricName={'Active Controllers'}/></Paper>
-        </Grid>
-        <Grid item xs={6} className={classes.child}>
-          <Paper className={classes.paper}><ScoreCard data={12} metricName={'Offline Partition Count'}/></Paper>
-        </Grid>
-        <Grid item xs={12} className={classes.child}>
-          <Paper className={classes.paper}><BarChart metricName={'Connection Count'}/></Paper>
-        </Grid> */}
         <Grid item xs={12} className={classes.child}>
           <Paper className={classes.paper}><LineChart metricName={'Response Rate'}/></Paper>
         </Grid>
