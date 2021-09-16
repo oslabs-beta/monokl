@@ -21,17 +21,17 @@ const mapDistpatchToProps = (dispatch) => {
 };
 
 function UnderConstruction(props) {
-  console.log("Fetch Request: ", props.data);
-  let arrayToRender = [];
-  if (props.data) {
-    props.data.forEach((dataPoint, i) => {
-      arrayToRender.push(
-        <div key={`datapoint${i}`}>{JSON.stringify(dataPoint)}</div>
-      );
-    });
-  }
+  //console.log("Fetch Request: ", JSON.stringify(props.data));
+  // let arrayToRender = [];
+  // if (props.data) {
+  //   props.data.forEach((dataPoint, i) => {
+  //     arrayToRender.push(
+  //       <div key={`datapoint${i}`}>{JSON.stringify(dataPoint)}</div>
+  //     );
+  //   });
+  // }
 
-  console.log("ArraytoRender: ", arrayToRender);
+  // console.log("ArraytoRender: ", arrayToRender);
   return (
     <div>
       <h1>This page is currently under construction!</h1>
@@ -39,7 +39,8 @@ function UnderConstruction(props) {
 
       <button onClick={props.addCountAction}>Update Count</button>
       <button onClick={props.makeFetch}>make Fetch</button>
-      <div> {arrayToRender} </div>
+      {/* <div> {arrayToRender} </div> */}
+      <div> Data point: {JSON.stringify(props.data)} </div>
     </div>
   );
 }
