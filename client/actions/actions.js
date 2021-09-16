@@ -14,3 +14,10 @@ export const addPortAction = (userPort) => {
     payload: userPort,
   };
 };
+
+export const removePortAction = () => {
+  return {
+    type: types.REMOVE_PORT,
+    payload: '',
+  };
+};
