@@ -33,7 +33,7 @@ export const makeFetch = () => (dispatch) => {
   let data2 = fetch(
     "http://localhost:9090/api/v1/query?query=kafka_cluster_partition_underreplicated"
   ).then((respose) => respose.json());
-  
+
   Promise.all([data1, data2])
     // .then((allData) => {
     //   // let print = allData[0].json();
