@@ -90,9 +90,10 @@ const useStyles = makeStyles((theme) => ({
   },
   content: {
     // backgroundColor: 'lightgreen',
-    flexGrow: 1,
+    flexGrow: '1',
     padding: theme.spacing(3),
-    marginTop: '50px'
+    marginTop: '50px',
+    minWidth: '380px'
   },
   alertSettings:{
     // margin: theme.spacing.unit,
