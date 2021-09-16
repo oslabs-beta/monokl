@@ -31,7 +31,7 @@ function UnderConstruction(props) {
   //   });
   // }
 
-  // console.log("ArraytoRender: ", arrayToRender);
+  console.log("Component Data: ", props.data);
   return (
     <div>
       <h1>This page is currently under construction!</h1>

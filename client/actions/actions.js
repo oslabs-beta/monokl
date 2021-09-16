@@ -28,20 +28,14 @@ export const makeFetch = () => (dispatch) => {
   //make your fetch request,
   //when it resolves, take the data and send a dispatch
   let data1 = fetch(
-    "http://localhost:9090/api/v1/query?query=kafka_cluster_partition_replicascount"
+    "http://localhost:9090/api/v1/query_range?query=kafka_server_brokertopicmetrics_bytesin_total&start=2021-09-16T15:00:30.781Z&end=2021-09-16T15:49:00.781Z&step=60s"
   ).then((respose) => respose.json());
   let data2 = fetch(
     "http://localhost:9090/api/v1/query?query=kafka_cluster_partition_underreplicated"
   ).then((respose) => respose.json());
 
   Promise.all([data1, data2])
-    // .then((allData) => {
-    //   // let print = allData[0].json();
-    //   // console.log("Fetch AllData: ", print);
-    //   return allData[0].json();
-    // })
     .then((data) => {
-      console.log("Second then", data);
       dispatch({
         type: types.FETCH_DATA_SUCCESS,
         payload: data,
@@ -49,9 +43,9 @@ export const makeFetch = () => (dispatch) => {
     })
     .catch(console.error);
 };
-
+//"http://localhost:9090/api/v1/query_range?query=kafka_server_brokertopicmetrics_bytesin_total&start=2021-09-16T15:00:30.781Z&end=2021-09-16T15:49:00.781Z&step=15s"(
 //how to make this request modular.
-("http://localhost:9090/api/v1/query?query=jmx_scrape_duration_seconds");
+// "http://localhost:9090/api/v1/query?query=jmx_scrape_duration_seconds"
 //https://jsonplaceholder.typicode.com/users
 
 // Promise.all([
