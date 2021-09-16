@@ -1,8 +1,9 @@
 import * as types from "../actions/actionTypes.js";
-
+//Step 1, create a state property of  data and create a case in mainreducer
 const initialState = {
   count: 0,
   port: "",
+  data: [],
 };
 
 const mainReducer = (state = initialState, action) => {
@@ -17,6 +18,12 @@ const mainReducer = (state = initialState, action) => {
       return {
         ...state,
         port: action.payload,
+      };
+    //case for Fetch Data
+    case types.FETCH_DATA_SUCCESS:
+      return {
+        ...state,
+        data: action.payload,
       };
 
     default:
