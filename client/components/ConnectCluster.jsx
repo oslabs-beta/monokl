@@ -20,6 +20,7 @@ const useStyles = makeStyles((theme) => ({
   connect: {
     "& > *": {
       margin: theme.spacing(1),
+      color: "#537791",
     },
   },
 }));
@@ -37,6 +38,20 @@ const mapDistpatchToProps = (dispatch) => {
     },
   };
 };
+
+const verifyPort = async (port) => {
+  let valid = false;
+  const url = `http://localhost:${port}/api/v1/query?query=up`;
+  await fetch(url)
+    .then(res => res.json())
+    .then(data => {
+      console.log('res data -> ', data);
+      if (data.status === 'success') valid = true;
+      console.log('promise valid -> ', valid);
+    })
+    .catch(err => console.log(err));
+  return valid;
+}
 
 //component
 function ConnectCluster(props) {
@@ -61,12 +76,14 @@ function ConnectCluster(props) {
         <Button
           className={classes.connect}
           variant="contained"
-          color="#537791"
+          // color="#537791"
           href="#contained-buttons"
-          onClick={(ele) => {
-            ele.preventDefault();
-            const userPort = document.getElementById("exporter").value;
-            props.addPortAction(userPort);
+          onClick={async (e) => {
+            e.preventDefault();
+            const userPort = document.getElementById('exporter').value;
+            const verified = await verifyPort(userPort);
+            console.log('on click -> ', verified);
+            if (verified) props.addPortAction(userPort);
           }}
         >
           Connect
@@ -78,15 +95,3 @@ function ConnectCluster(props) {
 
 // export default ConnectCluster;
 export default connect(mapStateToProps, mapDistpatchToProps)(ConnectCluster);
-
-//Include click handler for the button, once clicked, we update our state.
-//button will have onclick Handler
-//in redux we need state property that is port, start- empty string
-//onclick handler, is gonna have a prebuilt url string
-//when button is clicked, we take the user input, concat to prebuilt url, then send fetch request
-//
-
-//change the way the component is exporting
-//import connect from redux
-//update the exporting statement to include mapdistpatchtoprops
-//actually write the function up above.
