@@ -18,7 +18,7 @@ export const addPortAction = (userPort) => {
 export const removePortAction = () => {
   return {
     type: types.REMOVE_PORT,
-    payload: '',
+    payload: "",
   };
 };
 //Step 5 create async and action creator
@@ -29,7 +29,8 @@ export const removePortAction = () => {
 //     payload: data,
 //   };
 // };
-//Broker Metrics
+
+//First: Broker Metrics
 export const makeFetch = () => (dispatch) => {
   //Underreplicated partitions(Score Card)
   let data1 = fetch(
@@ -48,32 +49,74 @@ export const makeFetch = () => (dispatch) => {
 
   //Leader Election Rate and Time Ms (Range)
   let data4 = fetch(
-    `http://localhost:9090/api/v1/query_range?query=kafka_controller_controllerstats_leaderelectionrateandtimems&start=2021-09-16T15:00:30.781Z&end=${new Date().toISOString()}&step=60s`
+    `http://localhost:9090/api/v1/query_range?query=kafka_controller_controllerstats_leaderelectionrateandtimems&start=2021-09-17T10:30:00.781Z&end=${new Date().toISOString()}&step=60s`
   ).then((respose) => respose.json());
 
   //Total Time (Range)
   let data5 = fetch(
-    `http://localhost:9090/api/v1/query_range?query=Kafka_network_requestmetrics_totaltimems&start=2021-09-16T15:00:30.781Z&end=${new Date().toISOString()}&step=60s`
+    `http://localhost:9090/api/v1/query_range?query=Kafka_network_requestmetrics_totaltimems&start=2021-09-17T10:30:00.781Z&end=${new Date().toISOString()}&step=60s`
   ).then((respose) => respose.json());
 
   //Purgatory Size (Range)
   let data6 = fetch(
-    `http://localhost:9090/api/v1/query_range?query=kafka_server_delayedoperationpurgatory_purgatorysize&start=2021-09-16T15:00:30.781Z&end=${new Date().toISOString()}&step=60s`
+    `http://localhost:9090/api/v1/query_range?query=kafka_server_delayedoperationpurgatory_purgatorysize&start=2021-09-17T10:30:00.781Z&end=${new Date().toISOString()}&step=60s`
   ).then((respose) => respose.json());
 
   //Bytes In Total (Range)
   let data7 = fetch(
-    `http://localhost:9090/api/v1/query_range?query=kafka_server_brokertopicmetrics_bytesin_total&start=2021-09-16T15:00:30.781Z&end=${new Date().toISOString()}&step=60s`
+    `http://localhost:9090/api/v1/query_range?query=kafka_server_brokertopicmetrics_bytesin_total&start=2021-09-17T10:30:00.781Z&end=${new Date().toISOString()}&step=60s`
   ).then((respose) => respose.json());
   //BytesOut Total(Range)
   let data8 = fetch(
-    `http://localhost:9090/api/v1/query_range?query=kafka_server_brokertopicmetrics_bytesout_total&start=2021-09-16T15:00:30.781Z&end=${new Date().toISOString()}&step=60s`
+    `http://localhost:9090/api/v1/query_range?query=kafka_server_brokertopicmetrics_bytesout_total&start=2021-09-17T10:30:00.781Z&end=${new Date().toISOString()}&step=60s`
   ).then((respose) => respose.json());
 
   Promise.all([data1, data2, data3, data4, data5, data6, data7, data8])
     .then((allData) => {
       dispatch({
         type: types.FETCH_DATA_SUCCESS,
+        payload: allData,
+      });
+    })
+    .catch(console.error);
+};
+
+//Third: Consumer Metrics
+export const makeConsumerMetricsFetch = () => (dispatch) => {
+  //Records Lag / Records Lag Max
+  let data1 = fetch(
+    "http://localhost:9090/api/v1/query?query=kafka_server_replicafetchermanager_maxlag"
+    //`http://localhost:9090/api/v1/query_range?query=kafka_server_replicafetchermanager_maxlag&start=2021-09-17T10:30:00.781Z&end=${new Date().toISOString()}&step=60s`
+  ).then((respose) => respose.json());
+
+  Promise.all([data1])
+    .then((allData) => {
+      dispatch({
+        type: types.FETCH_CONSUMER_SUCCESS,
+        payload: allData,
+      });
+    })
+    .catch(console.error);
+};
+
+//Fourth: Network Metrics
+export const makeNetworkMetricsFetch = () => (dispatch) => {
+  //Disk usage
+  let data1 = fetch(
+    "http://localhost:9090/api/v1/query?query=process_virtual_memory_bytes"
+    //`http://localhost:9090/api/v1/query_range?query=process_virtual_memory_bytes&start=2021-09-17T10:30:00.781Z&end=${new Date().toISOString()}&step=60s`
+  ).then((respose) => respose.json());
+
+  //CPU usage
+  let data2 = fetch(
+    "http://localhost:9090/api/v1/query?query=process_cpu_seconds_total"
+    //`http://localhost:9090/api/v1/query_range?query=process_cpu_seconds_total&start=2021-09-17T10:30:00.781Z&end=${new Date().toISOString()}&step=60s`
+  ).then((respose) => respose.json());
+
+  Promise.all([data1, data2])
+    .then((allData) => {
+      dispatch({
+        type: types.FETCH_NETWORK_SUCCESS,
         payload: allData,
       });
     })

@@ -1,45 +1,45 @@
-import React from 'react';
-import { HashRouter, Switch, Route, Redirect, Link } from 'react-router-dom';
-import { connect } from 'react-redux';
-import clsx from 'clsx';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import ConnectIcon from '@material-ui/icons/SettingsEthernetOutlined';
-import AlertIcon from '@material-ui/icons/ErrorOutlineOutlined';
-import HealthIcon from '@material-ui/icons/LocalHospitalOutlined';
-import SystemIcon from '@material-ui/icons/DvrOutlined';
-import NetworkIcon from '@material-ui/icons/NetworkCheckOutlined';
-import AlertSettingsIcon from '@material-ui/icons/SettingsApplicationsOutlined';
+import React from "react";
+import { HashRouter, Switch, Route, Redirect, Link } from "react-router-dom";
+import { connect } from "react-redux";
+import clsx from "clsx";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
+import Drawer from "@material-ui/core/Drawer";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import List from "@material-ui/core/List";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import Typography from "@material-ui/core/Typography";
+import Divider from "@material-ui/core/Divider";
+import IconButton from "@material-ui/core/IconButton";
+import MenuIcon from "@material-ui/icons/Menu";
+import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+import ConnectIcon from "@material-ui/icons/SettingsEthernetOutlined";
+import AlertIcon from "@material-ui/icons/ErrorOutlineOutlined";
+import HealthIcon from "@material-ui/icons/LocalHospitalOutlined";
+import SystemIcon from "@material-ui/icons/DvrOutlined";
+import NetworkIcon from "@material-ui/icons/NetworkCheckOutlined";
+import AlertSettingsIcon from "@material-ui/icons/SettingsApplicationsOutlined";
 
-import ConnectCluster from './ConnectCluster.jsx';
-import DisconnectCluster from './DisconnectCluster.jsx';
-import ClusterDisplay from './ClusterDisplay.jsx';
-import UnderConstruction from './UnderConstruction.jsx';
+import ConnectCluster from "./ConnectCluster.jsx";
+import DisconnectCluster from "./DisconnectCluster.jsx";
+import ClusterDisplay from "./ClusterDisplay.jsx";
+import UnderConstruction from "./UnderConstruction.jsx";
 
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: 'flex',
-    minHeight: '100vh'
+    display: "flex",
+    minHeight: "100vh",
   },
   appBar: {
-    backgroundColor: '#537791',
+    backgroundColor: "#537791",
     zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(['width', 'margin'], {
+    transition: theme.transitions.create(["width", "margin"], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
   appBarShift: {
     marginLeft: drawerWidth,
     width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
+    transition: theme.transitions.create(["width", "margin"], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
@@ -56,57 +56,59 @@ const useStyles = makeStyles((theme) => ({
     marginRight: 36,
   },
   hide: {
-    display: 'none',
+    display: "none",
   },
   drawer: {
     width: drawerWidth,
     flexShrink: 0,
-    whiteSpace: 'nowrap',
+    whiteSpace: "nowrap",
   },
   drawerOpen: {
     width: drawerWidth,
-    transition: theme.transitions.create('width', {
+    transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
   },
   drawerClose: {
-    transition: theme.transitions.create('width', {
+    transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-    overflowX: 'hidden',
+    overflowX: "hidden",
     width: theme.spacing(7) + 1,
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up("sm")]: {
       width: theme.spacing(9) + 1,
     },
   },
   toolbar: {
-    backgroundColor: '#537791',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
+    backgroundColor: "#537791",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "flex-end",
     padding: theme.spacing(0, 1),
     // necessary for content to be below app bar
     ...theme.mixins.toolbar,
   },
   content: {
     // backgroundColor: 'lightgreen',
-    flexGrow: '1',
+    flexGrow: "1",
     padding: theme.spacing(3),
-    marginTop: '50px',
-    minWidth: '380px'
+    marginTop: "50px",
+    minWidth: "380px",
   },
-  alertSettings:{
+  alertSettings: {
     // margin: theme.spacing.unit,
     // position: "fixed",
     // marginBottom: 'auto',
     // bottom: theme.spacing(2),
     // left: theme.spacing(2)
-  }
+  },
 }));
 
-const mapStateToProps = state => ({ port: state.mainReducer.port });
+const mapStateToProps = (state) => ({ port: state.mainReducer.port });
+
+
 
 function Sidebar(props) {
   const classes = useStyles();
@@ -160,51 +162,107 @@ function Sidebar(props) {
               [classes.drawerClose]: !open,
             }),
           }}
-          >
+        >
           <div className={classes.toolbar}>
             <IconButton onClick={handleDrawerClose}>
-              {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+              {theme.direction === "rtl" ? (
+                <ChevronRightIcon />
+              ) : (
+                <ChevronLeftIcon />
+              )}
             </IconButton>
           </div>
-          <Divider/>
+          <Divider />
           <List>
-            <ListItem button key={'Connect'} component={Link} to="/">
+            <ListItem button key={"Connect"} component={Link} to="/">
               <ListItemIcon>{<ConnectIcon />}</ListItemIcon>
-              <ListItemText primary={'Connect'} />
+              <ListItemText primary={"Connect"} />
             </ListItem>
-            <ListItem button key={'Alerts'} component={Link} to="/alerts">
+            <ListItem button key={"Alerts"} component={Link} to="/alerts">
               <ListItemIcon>{<AlertIcon />}</ListItemIcon>
-              <ListItemText primary={'Alerts'} />
+              <ListItemText primary={"Alerts"} />
             </ListItem>
-            <ListItem button key={'Cluster Health'} component={Link} to="/health">
+            <ListItem
+              button
+              key={"Cluster Health"}
+              component={Link}
+              to="/health"
+            >
               <ListItemIcon>{<HealthIcon />}</ListItemIcon>
-              <ListItemText primary={'Cluster Health'} />
+              <ListItemText primary={"Cluster Health"} />
             </ListItem>
-            <ListItem button key={'System Metrics'} component={Link} to="/system">
+            <ListItem
+              button
+              key={"System Metrics"}
+              component={Link}
+              to="/system"
+            >
               <ListItemIcon>{<SystemIcon />}</ListItemIcon>
-              <ListItemText primary={'System Metrics'} />
+              <ListItemText primary={"System Metrics"} />
             </ListItem>
-            <ListItem button key={'Network Metrics'} component={Link} to="/network">
+            <ListItem
+              button
+              key={"Network Metrics"}
+              component={Link}
+              to="/network"
+            >
               <ListItemIcon>{<NetworkIcon />}</ListItemIcon>
-              <ListItemText primary={'Network Metrics'} />
+              <ListItemText primary={"Network Metrics"} />
             </ListItem>
           </List>
-          <Divider/>
+          <Divider />
           <List className={classes.alertSettings}>
-            <ListItem button key={'Alert Settings'} component={Link} to="/settings">
-              <ListItemIcon>{ <AlertSettingsIcon />}</ListItemIcon>
-              <ListItemText primary={'Alert Settings'} />
+            <ListItem
+              button
+              key={"Alert Settings"}
+              onClick={() => {
+                console.log("Hello");
+              }}
+              component={Link}
+              to="/settings"
+            >
+              <ListItemIcon>{<AlertSettingsIcon />}</ListItemIcon>
+              <ListItemText primary={"Alert Settings"} />
             </ListItem>
           </List>
         </Drawer>
         <main className={classes.content}>
           <Switch>
-            <Route exact path="/" component={!props.port ? ConnectCluster : DisconnectCluster} />
-            <Route path="/alerts" component={props.port ? UnderConstruction : () => <Redirect to='/' />} />
-            <Route path="/health" component={props.port ? ClusterDisplay : () => <Redirect to='/' />} />
-            <Route path="/system" component={props.port ? UnderConstruction : () => <Redirect to='/' />} />
-            <Route path="/network" component={props.port ? UnderConstruction : () => <Redirect to='/' />} />
-            <Route path="/settings" component={props.port ? UnderConstruction : () => <Redirect to='/' />} />
+            <Route
+              exact
+              path="/"
+              component={!props.port ? ConnectCluster : DisconnectCluster}
+            />
+            <Route
+              path="/alerts"
+              component={
+                props.port ? UnderConstruction : () => <Redirect to="/" />
+              }
+            />
+            <Route
+              path="/health"
+              component={
+                props.port ? ClusterDisplay : () => <Redirect to="/" />
+              }
+            />
+            <Route
+              path="/system"
+              component={
+                props.port ? UnderConstruction : () => <Redirect to="/" />
+              }
+            />
+            <Route
+              path="/network"
+              component={
+                props.port ? UnderConstruction : () => <Redirect to="/" />
+              }
+            />
+            <Route
+              path="/settings"
+              component={
+                props.port ? UnderConstruction : () => <Redirect to="/" />
+              }
+            />
           </Switch>
         </main>
       </HashRouter>
