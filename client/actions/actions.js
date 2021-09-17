@@ -28,7 +28,8 @@ export const makeFetch = () => (dispatch) => {
   //make your fetch request,
   //when it resolves, take the data and send a dispatch
   let data1 = fetch(
-    "http://localhost:9090/api/v1/query_range?query=kafka_server_brokertopicmetrics_bytesin_total&start=2021-09-16T15:00:30.781Z&end=2021-09-16T15:49:00.781Z&step=60s"
+    "http://localhost:9090/api/v1/query_range?query=kafka_server_brokertopicmetrics_bytesin_total&start=2021-09-16T18:50:30.781Z&end=2021-09-16T19:00:00.781Z&step=60s"
+    // "http://localhost:9090/api/v1/query?query=kafka_server_brokertopicmetrics_bytesin_total"
   ).then((respose) => respose.json());
   let data2 = fetch(
     "http://localhost:9090/api/v1/query?query=kafka_cluster_partition_underreplicated"
@@ -36,6 +37,7 @@ export const makeFetch = () => (dispatch) => {
 
   Promise.all([data1, data2])
     .then((data) => {
+      console.log('this is the data from the fetch: ', data)
       dispatch({
         type: types.FETCH_DATA_SUCCESS,
         payload: data,

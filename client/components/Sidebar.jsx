@@ -26,6 +26,7 @@ import AlertSettingsIcon from '@material-ui/icons/SettingsApplicationsOutlined';
 import ConnectCluster from './ConnectCluster.jsx';
 import ClusterDisplay from './ClusterDisplay.jsx';
 import UnderConstruction from './UnderConstruction.jsx';
+import SystemDisplay from './SystemDisplay.jsx';
 
 const drawerWidth = 240;
 
@@ -197,7 +198,7 @@ export default function Sidebar() {
           <Route exact path="/" component={ConnectCluster} />
           <Route path="/alerts" component={UnderConstruction} />
           <Route path="/health" component={ClusterDisplay} />
-          <Route path="/system" component={UnderConstruction} />
+          <Route path="/system" component={SystemDisplay} />
           <Route path="/network" component={UnderConstruction} />
           <Route path="/settings" component={UnderConstruction} />
         </main>
