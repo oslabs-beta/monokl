@@ -4,7 +4,7 @@ import * as types from "../actions/actionTypes.js";
 const initialState = {
   count: 0,
   connectionTime: 0,
-  port: "",
+  port: "9090",
   data: [],
   bytesIn: 0,
   // clusterHealth: {

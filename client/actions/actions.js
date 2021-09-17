@@ -34,8 +34,9 @@ export const makeFetch = () => (dispatch) => {
   //make your fetch request,
   //when it resolves, take the data and send a dispatch
   let data1 = fetch(
-    "http://localhost:9090/api/v1/query_range?query=kafka_server_brokertopicmetrics_bytesin_total&start=2021-09-16T18:50:30.781Z&end=2021-09-16T19:00:00.781Z&step=60s"
+    // "http://localhost:9090/api/v1/query_range?query=kafka_server_brokertopicmetrics_bytesin_total&start=2021-09-16T18:50:30.781Z&end=2021-09-16T19:00:00.781Z&step=60s"
     // "http://localhost:9090/api/v1/query?query=kafka_server_brokertopicmetrics_bytesin_total"
+    `http://localhost:9090/api/v1/query_range?query=kafka_server_brokertopicmetrics_bytesin_total&start=2021-09-17T11:00:00.781Z&end=${new Date().toISOString()}&step=60s`
   ).then((respose) => respose.json());
   let data2 = fetch(
     "http://localhost:9090/api/v1/query?query=kafka_cluster_partition_underreplicated"

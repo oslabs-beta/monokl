@@ -20,32 +20,29 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ClusterDisplay() {
+export default function ConsumerDisplay() {
   const classes = useStyles();
 
   return (
     <div className={classes.root}>
       <Grid container spacing={3} className={classes.parent}>
+
+        <Grid item xs={12}>Consumer Metrics</Grid>
+
         <Grid item xs={12} className={classes.child}>
-          <Paper className={classes.paper}><LineChart metricName={'Response Rate'}/></Paper>
-        </Grid>
-        <Grid item xs={12} className={classes.child}>
-          <Paper className={classes.paper}><LineChart metricName={'Request Rate'}/></Paper>
-        </Grid>
-        <Grid item xs={6} className={classes.child}>
-          <Paper className={classes.paper}><LineChart metricName={'Request Latency Average'}/></Paper>
-        </Grid>
-        <Grid item xs={6} className={classes.child}>
-          <Paper className={classes.paper}><LineChart metricName={'Outgoing Byte Rate'}/></Paper>
+          <Paper className={classes.paper}><LineChart metricName={'Bytes Consumed Rate'}/></Paper>
         </Grid>
         <Grid item xs={12} className={classes.child}>
-          <Paper className={classes.paper}><LineChart metricName={'Compression Rate'}/></Paper>
+          <Paper className={classes.paper}><LineChart metricName={'Records Consumed Rate'}/></Paper>
+        </Grid>
+        <Grid item xs={12} className={classes.child}>
+          <Paper className={classes.paper}><LineChart metricName={'Fetch Rate'}/></Paper>
         </Grid>
         <Grid item xs={6} className={classes.child}>
-          <Paper className={classes.paper}><LineChart metricName={'I/O Wait Time'}/></Paper>
+          <Paper className={classes.paper}><LineChart metricName={'Records Lag'}/></Paper>
         </Grid>
         <Grid item xs={6} className={classes.child}>
-          <Paper className={classes.paper}><LineChart metricName={'Batch Size'}/></Paper>
+          <Paper className={classes.paper}><LineChart metricName={'Records Lag Max'}/></Paper>
         </Grid>
       </Grid>
     </div>
