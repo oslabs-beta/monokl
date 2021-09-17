@@ -34,7 +34,7 @@ const mainReducer = (state = initialState, action) => {
       return {
         ...state,
         data: action.payload,
-        bytesIn: action.payload[0].data.result[0].values,
+        bytesIn: action.payload[7].data.result[0].values,
       };
 
     default:

@@ -23,26 +23,57 @@ export const addPortAction = (userPort) => {
 //     payload: data,
 //   };
 // };
-
+//Broker Metrics
 export const makeFetch = () => (dispatch) => {
-  //make your fetch request,
-  //when it resolves, take the data and send a dispatch
+  //Underreplicated partitions(Score Card)
   let data1 = fetch(
-    "http://localhost:9090/api/v1/query_range?query=kafka_server_brokertopicmetrics_bytesin_total&start=2021-09-16T15:00:30.781Z&end=2021-09-16T15:49:00.781Z&step=60s"
-  ).then((respose) => respose.json());
-  let data2 = fetch(
     "http://localhost:9090/api/v1/query?query=kafka_cluster_partition_underreplicated"
   ).then((respose) => respose.json());
 
-  Promise.all([data1, data2])
-    .then((data) => {
+  //Active Controller Count(Score Card)
+  let data2 = fetch(
+    "http://localhost:9090/api/v1/query?query=kafka_controller_kafkacontroller_activecontrollercount"
+  ).then((respose) => respose.json());
+
+  //Offline Partitions Count (Score Card)
+  let data3 = fetch(
+    "http://localhost:9090/api/v1/query?query=kafka_controller_kafkacontroller_offlinepartitionscount"
+  ).then((respose) => respose.json());
+
+  //Leader Election Rate and Time Ms (Range)
+  let data4 = fetch(
+    `http://localhost:9090/api/v1/query_range?query=kafka_controller_controllerstats_leaderelectionrateandtimems&start=2021-09-16T15:00:30.781Z&end=${new Date().toISOString()}&step=60s`
+  ).then((respose) => respose.json());
+
+  //Total Time (Range)
+  let data5 = fetch(
+    `http://localhost:9090/api/v1/query_range?query=Kafka_network_requestmetrics_totaltimems&start=2021-09-16T15:00:30.781Z&end=${new Date().toISOString()}&step=60s`
+  ).then((respose) => respose.json());
+
+  //Purgatory Size (Range)
+  let data6 = fetch(
+    `http://localhost:9090/api/v1/query_range?query=kafka_server_delayedoperationpurgatory_purgatorysize&start=2021-09-16T15:00:30.781Z&end=${new Date().toISOString()}&step=60s`
+  ).then((respose) => respose.json());
+
+  //Bytes In Total (Range)
+  let data7 = fetch(
+    `http://localhost:9090/api/v1/query_range?query=kafka_server_brokertopicmetrics_bytesin_total&start=2021-09-16T15:00:30.781Z&end=${new Date().toISOString()}&step=60s`
+  ).then((respose) => respose.json());
+  //BytesOut Total(Range)
+  let data8 = fetch(
+    `http://localhost:9090/api/v1/query_range?query=kafka_server_brokertopicmetrics_bytesout_total&start=2021-09-16T15:00:30.781Z&end=${new Date().toISOString()}&step=60s`
+  ).then((respose) => respose.json());
+
+  Promise.all([data1, data2, data3, data4, data5, data6, data7, data8])
+    .then((allData) => {
       dispatch({
         type: types.FETCH_DATA_SUCCESS,
-        payload: data,
+        payload: allData,
       });
     })
     .catch(console.error);
 };
+
 //"http://localhost:9090/api/v1/query_range?query=kafka_server_brokertopicmetrics_bytesin_total&start=2021-09-16T15:00:30.781Z&end=2021-09-16T15:49:00.781Z&step=15s"(
 //how to make this request modular.
 // "http://localhost:9090/api/v1/query?query=jmx_scrape_duration_seconds"
