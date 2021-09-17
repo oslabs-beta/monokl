@@ -4,15 +4,25 @@ import * as types from "../actions/actionTypes.js";
 const initialState = {
   count: 0,
   connectionTime: 0,
-  port: "9090",
+  port: "9092",
   data: [],
+  //Broker Metrics
+  underReplicatedPartitions: 0,
+  activeControllerCount: 0,
+  offlinePartitionsCount: 0,
+  leaderElectionRateAndTimeMs: 0,
+  totalTimeMS: 0,
+  purgatorySize: 0,
   bytesIn: 0,
-  // clusterHealth: {
-  //   metric1: action.payload[0].data.metric,
-  //   value: action.payload[0].data.result[0].value,
-  //   metric2: action.payload[1].data.metric,
-  //   value: action.payload[1].data.result[0].value,
-  // },
+  bytesOut: 0,
+  //Producer Metrics
+  responseRate: 0,
+  requestRate: 0,
+  outgoingByteRate: 0,
+  //Consumer Metrics
+  recordsLag: 0,
+  //NetworkMetrics
+  cpuUsage: 0,
 };
 
 const mainReducer = (state = initialState, action) => {
@@ -23,35 +33,44 @@ const mainReducer = (state = initialState, action) => {
         ...state,
         count: state.count + action.payload, //should be hardcoded to 1
       };
-
     case types.ADD_PORT:
       return {
         ...state,
         connectionTime: Date.now(),
         port: action.payload,
       };
-
     case types.REMOVE_PORT:
       return {
         ...state,
         port: action.payload,
       };
-    //case for Fetch Data
+    //case for Fetch Data(Broker Metric)
     case types.FETCH_DATA_SUCCESS:
       return {
         ...state,
         data: action.payload,
-        bytesIn: action.payload[0].data.result[0].values,
+        bytesIn: action.payload[7].data.result[0].values,
       };
-
-    case types.ADD_PRODUCER_DATA:
+    //case for Producer Metrics
+    case types.FETCH_PRODUCER_SUCCESS:
       return {
         ...state,
         responseRate: action.payload,
         requestRate: action.payload,
-        outgoingBytes: action.payload,
-      }
-
+        outgoingByteRate: action.payload,
+      };
+    //case for Consumer Metrics
+    case types.FETCH_CONSUMER_SUCCESS:
+      return {
+        ...state,
+        recordsLag: action.payload,
+      };
+    //case for Network Metrics
+    case types.FETCH_NETWORK_SUCCESS:
+      return {
+        ...state,
+        cpuUsage: action.payload,
+      };
     default:
       return state;
   }

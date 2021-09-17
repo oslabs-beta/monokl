@@ -1,6 +1,12 @@
 import React from "react";
 import { connect } from "react-redux";
-import { addCountAction, makeFetch } from "../actions/actions";
+import {
+  addCountAction,
+  makeFetch,
+  makeProducerMetrics,
+  makeConsumerMetricsFetch,
+  makeNetworkMetricsFetch,
+} from "../actions/actions";
 
 const mapStateToProps = (state) => {
   return {
@@ -16,6 +22,15 @@ const mapDistpatchToProps = (dispatch) => {
     },
     makeFetch: () => {
       dispatch(makeFetch());
+    },
+    makeProducerMetrics: () => {
+      dispatch(makeProducerMetrics());
+    },
+    makeConsumerMetrics: () => {
+      dispatch(makeConsumerMetricsFetch());
+    },
+    makeNetworkMetricsFetch: () => {
+      dispatch(makeNetworkMetricsFetch());
     },
   };
 };
