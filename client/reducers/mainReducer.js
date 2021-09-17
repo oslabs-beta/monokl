@@ -23,10 +23,17 @@ const mainReducer = (state = initialState, action) => {
         ...state,
         count: state.count + action.payload, //should be hardcoded to 1
       };
+
     case types.ADD_PORT:
       return {
         ...state,
         connectionTime: Date.now(),
+        port: action.payload,
+      };
+
+    case types.REMOVE_PORT:
+      return {
+        ...state,
         port: action.payload,
       };
     //case for Fetch Data
@@ -36,6 +43,7 @@ const mainReducer = (state = initialState, action) => {
         data: action.payload,
         bytesIn: action.payload[7].data.result[0].values,
       };
+
 
     default:
       return state;

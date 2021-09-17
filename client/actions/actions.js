@@ -15,6 +15,12 @@ export const addPortAction = (userPort) => {
   };
 };
 
+export const removePortAction = () => {
+  return {
+    type: types.REMOVE_PORT,
+    payload: '',
+  };
+};
 //Step 5 create async and action creator
 
 // export const fetchDataRequest = (data) => {

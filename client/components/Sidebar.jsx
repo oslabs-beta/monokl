@@ -1,5 +1,6 @@
 import React from 'react';
-import { HashRouter, Route, Link } from 'react-router-dom';
+import { HashRouter, Switch, Route, Redirect, Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -24,6 +25,7 @@ import NetworkIcon from '@material-ui/icons/NetworkCheckOutlined';
 import AlertSettingsIcon from '@material-ui/icons/SettingsApplicationsOutlined';
 
 import ConnectCluster from './ConnectCluster.jsx';
+import DisconnectCluster from './DisconnectCluster.jsx';
 import ClusterDisplay from './ClusterDisplay.jsx';
 import UnderConstruction from './UnderConstruction.jsx';
 
@@ -104,7 +106,9 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function Sidebar() {
+const mapStateToProps = state => ({ port: state.mainReducer.port });
+
+function Sidebar(props) {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -194,14 +198,18 @@ export default function Sidebar() {
           </List>
         </Drawer>
         <main className={classes.content}>
-          <Route exact path="/" component={ConnectCluster} />
-          <Route path="/alerts" component={UnderConstruction} />
-          <Route path="/health" component={ClusterDisplay} />
-          <Route path="/system" component={UnderConstruction} />
-          <Route path="/network" component={UnderConstruction} />
-          <Route path="/settings" component={UnderConstruction} />
+          <Switch>
+            <Route exact path="/" component={!props.port ? ConnectCluster : DisconnectCluster} />
+            <Route path="/alerts" component={props.port ? UnderConstruction : () => <Redirect to='/' />} />
+            <Route path="/health" component={props.port ? ClusterDisplay : () => <Redirect to='/' />} />
+            <Route path="/system" component={props.port ? UnderConstruction : () => <Redirect to='/' />} />
+            <Route path="/network" component={props.port ? UnderConstruction : () => <Redirect to='/' />} />
+            <Route path="/settings" component={props.port ? UnderConstruction : () => <Redirect to='/' />} />
+          </Switch>
         </main>
       </HashRouter>
     </div>
   );
 }
+
+export default connect(mapStateToProps, null)(Sidebar);
