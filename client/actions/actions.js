@@ -81,7 +81,7 @@ export const makeFetch = () => (dispatch) => {
     .catch(console.error);
 };
 //Second: Producer Metrics
-const fetchProducerMetrics = () => (dispatch) => {
+export const makeProducerMetrics = () => (dispatch) => {
   //make your fetch request,
   //when it resolves, take the data and send a dispatch
   let responseRate = fetch(
@@ -97,7 +97,7 @@ const fetchProducerMetrics = () => (dispatch) => {
   Promise.all([responseRate, requestRate, outgoingBytes])
     .then((data) => {
       dispatch({
-        type: types.ADD_PRODUCER_DATA,
+        type: types.FETCH_CONSUMER_SUCCESS,
         payload: data,
       });
     })

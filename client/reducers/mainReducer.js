@@ -14,6 +14,7 @@ const initialState = {
   totalTimeMS: 0,
   purgatorySize: 0,
   bytesIn: 0,
+  bytesOut: 0,
   //Producer Metrics
   responseRate: 0,
   requestRate: 0,
