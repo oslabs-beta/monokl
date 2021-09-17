@@ -30,7 +30,7 @@ const mapStateToProps = (state) => {
   };
 };
 
-function ClusterDisplay(props) {
+function BrokerDisplay(props) {
   const classes = useStyles();
   console.log("props.bytesIN", props.bytesIn);
 
@@ -45,6 +45,9 @@ function ClusterDisplay(props) {
     <>
       <div className={classes.root}>
         <Grid container spacing={3} className={classes.parent}>
+
+          <Grid item xs={12}>Broker Metrics</Grid>
+
           <Grid item xs={4} className={classes.child}>
             <Paper className={classes.paper}>
               <ScoreCard data={0} metricName={"Under Replicated Partitions"} />
@@ -100,4 +103,4 @@ function ClusterDisplay(props) {
   );
 }
 
-export default connect(mapStateToProps, null)(ClusterDisplay);
+export default connect(mapStateToProps, null)(BrokerDisplay);

@@ -4,7 +4,7 @@ import * as types from "../actions/actionTypes.js";
 const initialState = {
   count: 0,
   connectionTime: 0,
-  port: "",
+  port: "9090",
   data: [],
   bytesIn: 0,
   // clusterHealth: {
@@ -44,6 +44,13 @@ const mainReducer = (state = initialState, action) => {
         bytesIn: action.payload[0].data.result[0].values,
       };
 
+    case types.ADD_PRODUCER_DATA:
+      return {
+        ...state,
+        responseRate: action.payload,
+        requestRate: action.payload,
+        outgoingBytes: action.payload,
+      }
 
     default:
       return state;

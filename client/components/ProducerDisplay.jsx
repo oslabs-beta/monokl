@@ -20,29 +20,35 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function NetworkDisplay() {
+export default function ProducerDisplay() {
   const classes = useStyles();
 
   return (
     <div className={classes.root}>
       <Grid container spacing={3} className={classes.parent}>
 
-        <Grid item xs={12}>Network Metrics</Grid>
+        <Grid item xs={12}>Producer Metrics</Grid>
 
-        <Grid item xs={6} className={classes.child}>
-          <Paper className={classes.paper}><LineChart metricName={'Disk Usage'}/></Paper>
-        </Grid>
-        <Grid item xs={6} className={classes.child}>
-          <Paper className={classes.paper}><LineChart metricName={'CPU Usage'}/></Paper>
+        <Grid item xs={12} className={classes.child}>
+          <Paper className={classes.paper}><LineChart metricName={'Response Rate'}/></Paper>
         </Grid>
         <Grid item xs={12} className={classes.child}>
-          <Paper className={classes.paper}><BarChart metricName={'Page Cache Read Ration'}/></Paper>
+          <Paper className={classes.paper}><LineChart metricName={'Request Rate'}/></Paper>
         </Grid>
         <Grid item xs={6} className={classes.child}>
-          <Paper className={classes.paper}><LineChart metricName={'Network Bytes Sent'}/></Paper>
+          <Paper className={classes.paper}><LineChart metricName={'Request Latency Average'}/></Paper>
         </Grid>
         <Grid item xs={6} className={classes.child}>
-          <Paper className={classes.paper}><LineChart metricName={'Network Bytes Received'}/></Paper>
+          <Paper className={classes.paper}><LineChart metricName={'Outgoing Byte Rate'}/></Paper>
+        </Grid>
+        <Grid item xs={12} className={classes.child}>
+          <Paper className={classes.paper}><LineChart metricName={'Compression Rate'}/></Paper>
+        </Grid>
+        <Grid item xs={6} className={classes.child}>
+          <Paper className={classes.paper}><LineChart metricName={'I/O Wait Time'}/></Paper>
+        </Grid>
+        <Grid item xs={6} className={classes.child}>
+          <Paper className={classes.paper}><LineChart metricName={'Batch Size'}/></Paper>
         </Grid>
       </Grid>
     </div>
