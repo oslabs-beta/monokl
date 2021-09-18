@@ -25,49 +25,55 @@ const useStyles = makeStyles((theme) => ({
 //use a mapstatetoprops to pass data to both line charts
 const mapStateToProps = (state) => {
   return {
-    responseRate: state.mainReducer.responseRate,
-    // requestRate: state.mainReducer.requestRate,
-    // outgoingBytes: state.mainReducer.outgoingBytes
+    totalTimeProduce: state.mainReducer.totalTimeProduce,
+    totalProducerRequest: state.mainReducer.totalProducerRequest,
+    failedProducerRequest: state.mainReducer.failedProducerRequest,
   };
 };
 
 function ProducerDisplay(props) {
-  console.log("props.responseRate :", props.responseRate);
-  console.log("50th object:", props.responseRate[0].values);
+  // console.log("props.totalTimeProduce :", props.totalTimeProduce);
+  // console.log("75th object:", props.totalTimeProduce[1].values);
 
-  //Leader Election Rate
-  const xArray50 = props.responseRate[0].values.map((data) => {
+  console.log(" Failed :", props.failedProducerRequest);
+  //Total Time MS,{Produce}
+  const xArray50 = props.totalTimeProduce[0].values.map((data) => {
     let date = new Date(data[0]);
     return date.getTime();
   });
-  const yArray50 = props.responseRate[0].values.map((data) => Number(data[1]));
+  const yArray50 = props.totalTimeProduce[0].values.map((data) =>
+    Number(data[1])
+  );
+  const yArray75 = props.totalTimeProduce[1].values.map((data) =>
+    Number(data[1])
+  );
+  const yArray95 = props.totalTimeProduce[2].values.map((data) =>
+    Number(data[1])
+  );
+  const yArray99 = props.totalTimeProduce[4].values.map((data) =>
+    Number(data[1])
+  );
+
+  //totalProducerRequest
+  const xArrayTotalProducer = props.totalProducerRequest.map((data) => {
+    let date = new Date(data[0]);
+    return date.getTime();
+  });
+  const yArrayTotalProducer = props.totalProducerRequest.map((data) =>
+    Number(data[1])
+  );
+
+  //failedProducerRequest
+
+  const xFailedProducerRequest = props.failedProducerRequest.map((data) => {
+    let date = new Date(data[0]);
+    return date.getTime();
+  });
+  const yFailedProducerRequest = props.failedProducerRequest.map((data) =>
+    Number(data[1])
+  );
 
   const classes = useStyles();
-  // get the y-axis from first element (metric line)
-  // const xAxis = props.responseRate[0].values.map((data) => {
-  //   let date = new Date(data[1]);
-  //   return date.getTime();
-  // });
-  // // get the Fetch Consumer x-axis 50th
-  // const resProduce1 = props.responseRate[0].values.map((data) =>
-  //   Number(data[0])
-  // );
-  // // get the Fetch x-axis 98th
-  // const resProduce2 = props.responseRate[1].values.map((data) =>
-  //   Number(data[0])
-  // );
-
-  // console.log('fetchConsumer axis: ', resFetch)
-  // const resProduce = props.responseRate.map((data) => {
-
-  // })
-
-  // const resOffsetCommit = props.responseRate.map((data) => {
-
-  // })
-  // const yArray = props.bytesIn.map((data) => Number(data[1]));
-  // console.log("X ", xArray);
-  // console.log("Y ", yArray);
 
   return (
     <div className={classes.root}>
@@ -86,39 +92,30 @@ function ProducerDisplay(props) {
                 "Quantile 99",
               ]}
               metricName={"Total Time ms Produce"}
+              xtime={xArray50}
+              y50={yArray50}
+              y75={yArray75}
+              y95={yArray95}
+              y99={yArray99}
             />
-
-            {/* <LineChart metricName={"Total Time ms Produce"} /> */}
           </Paper>
         </Grid>
         <Grid item xs={12} className={classes.child}>
           <Paper className={classes.paper}>
-            <LineChart metricName={"Request Rate"} />
-          </Paper>
-        </Grid>
-        <Grid item xs={6} className={classes.child}>
-          <Paper className={classes.paper}>
-            <LineChart metricName={"Request Latency Average"} />
-          </Paper>
-        </Grid>
-        <Grid item xs={6} className={classes.child}>
-          <Paper className={classes.paper}>
-            <LineChart metricName={"Outgoing Byte Rate"} />
+            <LineChart
+              metricName={"Total Producer Requests (Aggregate)"}
+              x={xArrayTotalProducer}
+              y={yArrayTotalProducer}
+            />
           </Paper>
         </Grid>
         <Grid item xs={12} className={classes.child}>
           <Paper className={classes.paper}>
-            <LineChart metricName={"Compression Rate"} />
-          </Paper>
-        </Grid>
-        <Grid item xs={6} className={classes.child}>
-          <Paper className={classes.paper}>
-            <LineChart metricName={"I/O Wait Time"} />
-          </Paper>
-        </Grid>
-        <Grid item xs={6} className={classes.child}>
-          <Paper className={classes.paper}>
-            <LineChart metricName={"Batch Size"} />
+            <LineChart
+              metricName={"Failed Producer Requests"}
+              x={xFailedProducerRequest}
+              y={yFailedProducerRequest}
+            />
           </Paper>
         </Grid>
       </Grid>

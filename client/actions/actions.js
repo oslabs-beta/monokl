@@ -87,17 +87,17 @@ export const fetchProducerMetrics = () => (dispatch) => {
     `http://localhost:9090/api/v1/query_range?query=kafka_network_requestmetrics_totaltimems{request="Produce"}&start=2021-09-18T10:30:00.781Z&end=${new Date().toISOString()}&step=60s`
   ).then((respose) => respose.json());
 
-  //1.RequestRate Range
-  let requestRate = fetch(
-    `http://localhost:9090/api/v1/query_range?query=kafka_network_requestmetrics_requestqueuetimems&start=2021-09-18T10:30:00.781Z&end=${new Date().toISOString()}&step=60s`
+  //1. Total Producer Requests Total (Aggregate)
+  let data1 = fetch(
+    `http://localhost:9090/api/v1/query_range?query=kafka_server_brokertopicmetrics_totalproducerequests_total&start=2021-09-18T10:30:00.781Z&end=${new Date().toISOString()}&step=60s`
   ).then((respose) => respose.json());
 
-  //2. Outgoing Bytes out
-  let outgoingBytes = fetch(
-    `http://localhost:9090/api/v1/query_range?query=kafka_server_brokertopicmetrics_bytesout_total&start=2021-09-18T10:30:00.781Z&end=${new Date().toISOString()}&step=60s`
+  //2. Failed Producer Requests (Aggregate)
+  let data3 = fetch(
+    `http://localhost:9090/api/v1/query_range?query=kafka_server_brokertopicmetrics_failedproducerequests_total&start=2021-09-18T10:30:00.781Z&end=${new Date().toISOString()}&step=60s`
   ).then((respose) => respose.json());
 
-  Promise.all([data0, requestRate, outgoingBytes])
+  Promise.all([data0, data1, data3])
     .then((allData) => {
       dispatch({
         type: types.FETCH_PRODUCER_SUCCESS,
@@ -109,13 +109,12 @@ export const fetchProducerMetrics = () => (dispatch) => {
 
 //Third: Consumer Metrics
 export const fetchConsumerMetrics = () => (dispatch) => {
-  //Records Lag / Records Lag Max
-  let data1 = fetch(
-    "http://localhost:9090/api/v1/query?query=kafka_server_replicafetchermanager_maxlag"
-    //`http://localhost:9090/api/v1/query_range?query=kafka_server_replicafetchermanager_maxlag&start=2021-09-17T10:30:00.781Z&end=${new Date().toISOString()}&step=60s`
+  //0.Total Time MS {Consumer}
+  let data0 = fetch(
+    `http://localhost:9090/api/v1/query_range?query=kafka_network_requestmetrics_totaltimems{request="FetchConsumer"}&start=2021-09-18T10:30:00.781Z&end=${new Date().toISOString()}&step=60s`
   ).then((respose) => respose.json());
 
-  Promise.all([data1])
+  Promise.all([data0])
     .then((allData) => {
       dispatch({
         type: types.FETCH_CONSUMER_SUCCESS,

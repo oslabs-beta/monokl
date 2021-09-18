@@ -16,11 +16,11 @@ const initialState = {
   bytesIn: 0,
   bytesOut: 0,
   //Producer Metrics
-  responseRate: 0,
-  requestRate: 0,
-  outgoingByteRate: 0,
+  totalTimeProduce: 0,
+  totalProducerRequest: 0,
+  failedProducerRequest: 0,
   //Consumer Metrics
-  recordsLag: 0,
+  totalTimeFetchConsumer: 0,
   //NetworkMetrics
   cpuUsage: 0,
 };
@@ -63,16 +63,16 @@ const mainReducer = (state = initialState, action) => {
       return {
         ...state,
         data: action.payload,
-        responseRate: action.payload[0].data.result,
-        // requestRate: action.payload[1].values,
-        // outgoingByteRate: `outgoingByteRate: ${action.payload}`,
+        totalTimeProduce: action.payload[0].data.result,
+        totalProducerRequest: action.payload[1].data.result[0].values,
+        failedProducerRequest: action.payload[2].data.result[0].values,
       };
     //case for Consumer Metrics
     case types.FETCH_CONSUMER_SUCCESS:
       return {
         ...state,
         data: action.payload,
-        recordsLag: action.payload,
+        totalTimeFetchConsumer: action.payload[0].data.result,
       };
     //case for Network Metrics
     case types.FETCH_NETWORK_SUCCESS:
