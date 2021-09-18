@@ -4,8 +4,10 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import BarChart from './charts/BarChart.jsx';
 import LineChart from './charts/LineChart.jsx';
+import MultipleLineChart from './charts/MultipleLineChart.jsx';
 import ScoreCard from './charts/ScoreCard.jsx';
 import { connect } from "react-redux";
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -31,15 +33,21 @@ const mapStateToProps = (state) => {
 };
 
 function ProducerDisplay(props) {
+
+  console.log("props.responseRate :" , props.responseRate)
+
   const classes = useStyles();
-  const yAxis = props.responseRate.map((data) => Number(data[1]))
-
-  const resFetchConsumer = props.responseRate.map((data) => Number(data[0]));
-
-  // const resFetch = props.responseRate.map((data) => {
-
-  // })
-
+  // get the y-axis from first element (metric line)
+  const xAxis = props.responseRate[0].values.map((data) => {
+    let date = new Date(data[1]);
+    return date.getTime();
+  })
+  // get the Fetch Consumer x-axis 50th
+  const resProduce1 = props.responseRate[0].values.map((data) => Number(data[0]));
+  // get the Fetch x-axis 98th
+  const resProduce2 = props.responseRate[1].values.map((data) => Number(data[0]))
+  
+  // console.log('fetchConsumer axis: ', resFetch)
   // const resProduce = props.responseRate.map((data) => {
     
   // })
@@ -50,6 +58,7 @@ function ProducerDisplay(props) {
   // const yArray = props.bytesIn.map((data) => Number(data[1]));
   // console.log("X ", xArray);
   // console.log("Y ", yArray);
+  console.log('this is props.responseRate from within producerDisplay comp: ', props.responseRate)
 
   return (
     <div className={classes.root}>
@@ -58,7 +67,7 @@ function ProducerDisplay(props) {
         <Grid item xs={12}>Producer Metrics</Grid>
 
         <Grid item xs={12} className={classes.child}>
-          <Paper className={classes.paper}><LineChart x={resFetchConsumer} y={yAxis} metricName={'Response Rate'}/></Paper>
+          <Paper className={classes.paper}><MultipleLineChart y1={resProduce1} y2={resProduce2} x={xAxis} label={['Quantile 50', 'Quantile 98', 'Produce', 'Offset Commit']}metricName={'Response Rate'}/></Paper>
         </Grid>
         <Grid item xs={12} className={classes.child}>
           <Paper className={classes.paper}><LineChart metricName={'Request Rate'}/></Paper>

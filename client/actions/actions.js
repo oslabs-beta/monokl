@@ -85,7 +85,7 @@ export const makeProducerMetrics = () => (dispatch) => {
   //make your fetch request,
   //when it resolves, take the data and send a dispatch
   let responseRate = fetch(
-    `http://localhost:9090/api/v1/query_range?query=kafka_network_requestmetrics_responsesendtimems&start=2021-09-17T16:04:00.781Z&end=${new Date().toISOString()}&step=60s`
+    `http://localhost:9090/api/v1/query_range?query=kafka_network_requestmetrics_responsesendtimems&start=2021-09-18T10:28:00.781Z&end=${new Date().toISOString()}&step=60s`
   ).then((respose) => respose.json());
   let requestRate = fetch(
     `http://localhost:9090/api/v1/query_range?query=kafka_network_requestmetrics_requestqueuetimems&start=2021-09-17T16:04:00.781Z&end=${new Date().toISOString()}&step=60s`
@@ -96,17 +96,20 @@ export const makeProducerMetrics = () => (dispatch) => {
 
   Promise.all([responseRate, requestRate, outgoingBytes])
   .then((dataResponse) => {
-    console.log('this is the response from producer fetch: ', dataResponse)
-    const reqFetchConsumer = []
+    // console.log('this is the response from producer fetch: ', dataResponse)
+    const resRateMetrics = [];
     dataResponse[0].data.result.forEach(req => {
-      if (req.metric.request === 'FetchConsumer' && req.metric.quantile === '0.98'){
-        reqFetchConsumer.push(req)
-        console.log('we have a match! ', req)
+      if (req.metric.request === 'Produce' && req.metric.quantile === '0.98'){
+        resRateMetrics.push(req)
+      }
+      if (req.metric.request === 'Produce' && req.metric.quantile === '0.50'){
+        resRateMetrics.push(req)
       }
     });   
-    return reqFetchConsumer;
+    return resRateMetrics;
   })
   .then((results) => {
+    console.log('this should be two metric objects: ', results)
     dispatch({
       type: types.FETCH_PRODUCER_SUCCESS,
       payload: results,

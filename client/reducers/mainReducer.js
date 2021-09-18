@@ -56,8 +56,8 @@ const mainReducer = (state = initialState, action) => {
       return {
         ...state,
         // this is an array of arrays with two values
-        responseRate: action.payload[0].values,
-        // requestRate: `requestRate: ${action.payload}`,
+        responseRate: action.payload,
+        // requestRate: action.payload[1].values,
         // outgoingByteRate: `outgoingByteRate: ${action.payload}`,
       };
     //case for Consumer Metrics
