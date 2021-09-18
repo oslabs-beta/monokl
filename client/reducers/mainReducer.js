@@ -62,8 +62,8 @@ const mainReducer = (state = initialState, action) => {
     case types.FETCH_PRODUCER_SUCCESS:
       return {
         ...state,
-        // this is an array of arrays with two values
-        responseRate: action.payload,
+        data: action.payload,
+        responseRate: action.payload[0].data.result,
         // requestRate: action.payload[1].values,
         // outgoingByteRate: `outgoingByteRate: ${action.payload}`,
       };
@@ -71,12 +71,14 @@ const mainReducer = (state = initialState, action) => {
     case types.FETCH_CONSUMER_SUCCESS:
       return {
         ...state,
+        data: action.payload,
         recordsLag: action.payload,
       };
     //case for Network Metrics
     case types.FETCH_NETWORK_SUCCESS:
       return {
         ...state,
+        data: action.payload,
         cpuUsage: action.payload,
       };
     default:

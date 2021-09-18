@@ -16,25 +16,25 @@ const MultipleLineChart = (props) => {
       },
       {
         label: props.label[1],
-        data: props.y2,
+        data: [1, 2, 3, 4],
         fill: false,
         backgroundColor: "#db4c96",
         borderColor: "rgba(219, 76, 150, 0.2)",
       },
       {
         label: props.label[2],
-        data: props.y3,
+        data: [2, 4, 6, 8],
         fill: false,
         backgroundColor: "#4c61db",
         borderColor: "rgba(76, 97, 219, 0.2)",
       },
       {
         label: props.label[3],
-        data: props.y4,
+        data: [3, 6, 9, 12],
         fill: false,
         backgroundColor: "#f79a08",
         borderColor: "rgba(247, 154, 8, 0.2)",
-      }
+      },
     ],
   };
 

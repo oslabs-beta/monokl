@@ -10,9 +10,8 @@ import {
 
 const mapStateToProps = (state) => {
   return {
-    count: state.mainReducer.count,
     data: state.mainReducer.data,
-    responseRate: state.mainReducer.responseRate
+    responseRate: state.mainReducer.responseRate,
   };
 };
 
@@ -30,8 +29,8 @@ const mapDistpatchToProps = (dispatch) => {
     fetchConsumerMetrics: () => {
       dispatch(fetchConsumerMetricsFetch());
     },
-    makeNetworkMetricsFetch: () => {
-      dispatch(fetchNetworkMetricsFetch());
+    fetchNetworkMetrics: () => {
+      dispatch(fetchNetworkMetrics());
     },
   };
 };
@@ -54,9 +53,9 @@ function UnderConstruction(props) {
       <h5> Items: {props.count} </h5>
 
       <button onClick={props.addCountAction}>Update Count</button>
-      <button onClick={props.fetchBrokerMetics}>make Fetch</button>
+      <button onClick={props.fetchProducerMetrics}>make Fetch</button>
       {/* <div> {arrayToRender} </div> */}
-      <div> Data point: {JSON.stringify(props.responseRate)} </div>
+      <div> Data point: {JSON.stringify(props.data)} </div>
     </div>
   );
 }
