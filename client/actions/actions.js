@@ -31,10 +31,10 @@ export const removePortAction = () => {
 // };
 
 //First: Broker Metrics
-export const makeFetch = () => (dispatch) => {
+export const fetchBrokerMetics = () => (dispatch) => {
   //Underreplicated partitions(Score Card)
   let data1 = fetch(
-    "http://localhost:9090/api/v1/query?query=kafka_cluster_partition_underreplicated"
+    "http://localhost:9090/api/v1/query?query=kafka_server_replicamanager_underreplicatedpartitions"
   ).then((respose) => respose.json());
 
   //Active Controller Count(Score Card)
@@ -49,7 +49,7 @@ export const makeFetch = () => (dispatch) => {
 
   //Leader Election Rate and Time Ms (Range)
   let data4 = fetch(
-    `http://localhost:9090/api/v1/query_range?query=kafka_controller_controllerstats_leaderelectionrateandtimems&start=2021-09-17T10:30:00.781Z&end=${new Date().toISOString()}&step=60s`
+    `http://localhost:9090/api/v1/query_range?query=kafka_controller_controllerstats_leaderelectionrateandtimems_count&start=2021-09-17T10:30:00.781Z&end=${new Date().toISOString()}&step=60s`
   ).then((respose) => respose.json());
 
   //Total Time (Range)
@@ -81,7 +81,7 @@ export const makeFetch = () => (dispatch) => {
     .catch(console.error);
 };
 //Second: Producer Metrics
-export const makeProducerMetrics = () => (dispatch) => {
+export const fetchProducerMetrics = () => (dispatch) => {
   //make your fetch request,
   //when it resolves, take the data and send a dispatch
   let responseRate = fetch(

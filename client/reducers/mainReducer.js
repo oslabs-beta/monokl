@@ -7,10 +7,10 @@ const initialState = {
   port: "9092",
   data: [],
   //Broker Metrics
-  underReplicatedPartitions: 0,
+  underReplicatedPartitions: [],
   activeControllerCount: 0,
   offlinePartitionsCount: 0,
-  leaderElectionRateAndTimeMs: 0,
+  leaderElectionRateAndTimeMs: [],
   totalTimeMS: 0,
   purgatorySize: 0,
   bytesIn: 0,
@@ -49,6 +49,10 @@ const mainReducer = (state = initialState, action) => {
       return {
         ...state,
         data: action.payload,
+        underReplicatedPartitions: action.payload[0].data.result[0].value[1],
+        activeControllerCount: action.payload[1].data.result[0].value[1],
+        offlinePartitionsCount: 0,
+        leaderElectionRateAndTimeMs: action.payload[3].data.result[0].values,
         bytesIn: action.payload[7].data.result[0].values,
       };
     //case for Producer Metrics

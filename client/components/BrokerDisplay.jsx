@@ -26,46 +26,76 @@ const useStyles = makeStyles((theme) => ({
 const mapStateToProps = (state) => {
   return {
     data: state.mainReducer.data,
+    underReplicatedPartitions: state.mainReducer.underReplicatedPartitions,
+    activeControllerCount: state.mainReducer.activeControllerCount,
+    offlinePartitionsCount: state.mainReducer.offlinePartitionsCount,
+    leaderElectionRateAndTimeMs: state.mainReducer.leaderElectionRateAndTimeMs,
     bytesIn: state.mainReducer.bytesIn,
   };
 };
 
 function BrokerDisplay(props) {
   const classes = useStyles();
-  console.log("props.bytesIN", props.bytesIn);
+  console.log(
+    "props.leaderElectionRateAndTimeMs",
+    props.leaderElectionRateAndTimeMs
+  );
 
   const xArray = props.bytesIn.map((data) => {
     let date = new Date(data[0]);
     return date.getTime();
   });
   const yArray = props.bytesIn.map((data) => Number(data[1]));
-  console.log("X ", xArray);
-  console.log("Y ", yArray);
+  // console.log("X ", xArray);
+  // console.log("Y ", yArray);
+
+  const xArrayLeader = props.leaderElectionRateAndTimeMs.map((data) => {
+    let date = new Date(data[0]);
+    return date.getTime();
+  });
+  const yArrayLeader = props.leaderElectionRateAndTimeMs.map((data) =>
+    Number(data[1])
+  );
+
   return (
     <>
       <div className={classes.root}>
         <Grid container spacing={3} className={classes.parent}>
-
-          <Grid item xs={12}>Broker Metrics</Grid>
+          <Grid item xs={12}>
+            Broker Metrics
+          </Grid>
 
           <Grid item xs={4} className={classes.child}>
             <Paper className={classes.paper}>
-              <ScoreCard data={0} metricName={"Under Replicated Partitions"} />
+              <ScoreCard
+                data={props.underReplicatedPartitions}
+                metricName={"Under Replicated Partitions"}
+              />
             </Paper>
           </Grid>
           <Grid item xs={4} className={classes.child}>
             <Paper className={classes.paper}>
-              <ScoreCard data={1} metricName={"Active Controller Count"} />
+              <ScoreCard
+                data={props.activeControllerCount}
+                metricName={"Active Controller Count"}
+              />
             </Paper>
           </Grid>
           <Grid item xs={4} className={classes.child}>
             <Paper className={classes.paper}>
-              <ScoreCard data={12} metricName={"Offline Partition Count"} />
+              <ScoreCard
+                data={props.offlinePartitionsCount}
+                metricName={"Offline Partition Count"}
+              />
             </Paper>
           </Grid>
           <Grid item xs={12} className={classes.child}>
             <Paper className={classes.paper}>
-              <LineChart metricName={"Leader Election Rate and Time Ms"} />
+              <LineChart
+                metricName={"Leader Election Rate and Time Ms"}
+                x={xArrayLeader}
+                y={yArrayLeader}
+              />
             </Paper>
           </Grid>
           <Grid item xs={12} className={classes.child}>
@@ -98,7 +128,15 @@ function BrokerDisplay(props) {
       {/* <div>
         Bytes In Array: {JSON.stringify(props.bytesIn.data.result[0].value)}
       </div> */}
-      <div>Bytes In Array: {props.bytesIn}</div>
+      {/* <div>Bytes In Array: {props.bytesIn}</div> */}
+      {/* <div>
+        Under Replicated partitions:{" "}
+        {JSON.stringify(props.underReplicatedPartitions)}
+      </div> */}
+      {/* <div>
+        Under Replicated partitions:{" "}
+        {props.underReplicatedPartitions}
+      </div> */}
     </>
   );
 }

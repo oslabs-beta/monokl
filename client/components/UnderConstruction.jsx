@@ -2,10 +2,10 @@ import React from "react";
 import { connect } from "react-redux";
 import {
   addCountAction,
-  makeFetch,
-  makeProducerMetrics,
-  makeConsumerMetricsFetch,
-  makeNetworkMetricsFetch,
+  fetchBrokerMetics,
+  fetchProducerMetrics,
+  fetchConsumerMetrics,
+  fetchNetworkMetrics,
 } from "../actions/actions";
 
 const mapStateToProps = (state) => {
@@ -20,17 +20,17 @@ const mapDistpatchToProps = (dispatch) => {
     addCountAction: () => {
       dispatch(addCountAction);
     },
-    makeFetch: () => {
-      dispatch(makeFetch());
+    fetchBrokerMetics: () => {
+      dispatch(fetchBrokerMetics());
     },
-    makeProducerMetrics: () => {
-      dispatch(makeProducerMetrics());
+    fetchProducerMetrics: () => {
+      dispatch(fetchProducerMetrics());
     },
-    makeConsumerMetrics: () => {
-      dispatch(makeConsumerMetricsFetch());
+    fetchConsumerMetrics: () => {
+      dispatch(fetchConsumerMetricsFetch());
     },
     makeNetworkMetricsFetch: () => {
-      dispatch(makeNetworkMetricsFetch());
+      dispatch(fetchNetworkMetricsFetch());
     },
   };
 };
@@ -46,14 +46,14 @@ function UnderConstruction(props) {
   //   });
   // }
 
-  console.log("Component Data: ", props.data);
+  // console.log("Component Data: ", props.data);
   return (
     <div>
       <h1>This page is currently under construction!</h1>
       <h5> Items: {props.count} </h5>
 
       <button onClick={props.addCountAction}>Update Count</button>
-      <button onClick={props.makeFetch}>make Fetch</button>
+      <button onClick={props.fetchBrokerMetics}>make Fetch</button>
       {/* <div> {arrayToRender} </div> */}
       <div> Data point: {JSON.stringify(props.data)} </div>
     </div>
