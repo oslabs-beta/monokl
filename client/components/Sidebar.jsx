@@ -19,8 +19,9 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import ConnectIcon from "@material-ui/icons/SettingsEthernetOutlined";
 import AlertIcon from "@material-ui/icons/ErrorOutlineOutlined";
-import HealthIcon from "@material-ui/icons/LocalHospitalOutlined";
-import SystemIcon from "@material-ui/icons/DvrOutlined";
+import BrokerIcon from '@mui/icons-material/OpenWithOutlined';
+import ProducerIcon from '@mui/icons-material/StoreOutlined';
+import ConsumerIcon from '@mui/icons-material/ShoppingBagOutlined';
 import NetworkIcon from "@material-ui/icons/NetworkCheckOutlined";
 import AlertSettingsIcon from "@material-ui/icons/SettingsApplicationsOutlined";
 
@@ -197,7 +198,7 @@ function Sidebar(props) {
               component={Link}
               to="/broker"
             >
-              <ListItemIcon>{<HealthIcon />}</ListItemIcon>
+              <ListItemIcon>{<BrokerIcon />}</ListItemIcon>
               <ListItemText primary={"Broker Metrics"} />
             </ListItem>
             <ListItem
@@ -206,7 +207,7 @@ function Sidebar(props) {
               component={Link}
               to="/producer"
             >
-              <ListItemIcon>{<SystemIcon />}</ListItemIcon>
+              <ListItemIcon>{<ProducerIcon />}</ListItemIcon>
               <ListItemText primary={"Producer Metrics"} />
             </ListItem>
             <ListItem
@@ -215,7 +216,7 @@ function Sidebar(props) {
               component={Link}
               to="/consumer"
             >
-              <ListItemIcon>{<SystemIcon />}</ListItemIcon>
+              <ListItemIcon>{<ConsumerIcon />}</ListItemIcon>
               <ListItemText primary={"Consumer Metrics"} />
             </ListItem>
             <ListItem
