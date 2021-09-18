@@ -7,20 +7,20 @@ const initialState = {
   port: "9092",
   data: [],
   //Broker Metrics
-  underReplicatedPartitions: 0,
+  underReplicatedPartitions: [],
   activeControllerCount: 0,
   offlinePartitionsCount: 0,
-  leaderElectionRateAndTimeMs: 0,
+  leaderElectionRateAndTimeMs: [],
   totalTimeMS: 0,
   purgatorySize: 0,
   bytesIn: 0,
   bytesOut: 0,
   //Producer Metrics
-  responseRate: 0,
-  requestRate: 0,
-  outgoingByteRate: 0,
+  totalTimeProduce: 0,
+  totalProducerRequest: 0,
+  failedProducerRequest: 0,
   //Consumer Metrics
-  recordsLag: 0,
+  totalTimeFetchConsumer: 0,
   //NetworkMetrics
   cpuUsage: 0,
 };
@@ -49,27 +49,36 @@ const mainReducer = (state = initialState, action) => {
       return {
         ...state,
         data: action.payload,
-        bytesIn: action.payload[7].data.result[0].values,
+        underReplicatedPartitions: action.payload[0].data.result[0].value[1],
+        activeControllerCount: action.payload[1].data.result[0].value[1],
+        offlinePartitionsCount: action.payload[2].data.result[0].value[1],
+        leaderElectionRateAndTimeMs: action.payload[3].data.result[0].values,
+        totalTimeMS: action.payload[4],
+        purgatorySize: action.payload[5].data.result[0].values,
+        bytesIn: action.payload[6].data.result[0].values,
+        bytesOut: action.payload[6].data.result[0].values,
       };
     //case for Producer Metrics
     case types.FETCH_PRODUCER_SUCCESS:
       return {
         ...state,
-        // this is an array of arrays with two values
-        responseRate: action.payload,
-        // requestRate: action.payload[1].values,
-        // outgoingByteRate: `outgoingByteRate: ${action.payload}`,
+        data: action.payload,
+        totalTimeProduce: action.payload[0].data.result,
+        totalProducerRequest: action.payload[1].data.result[0].values,
+        failedProducerRequest: action.payload[2].data.result[0].values,
       };
     //case for Consumer Metrics
     case types.FETCH_CONSUMER_SUCCESS:
       return {
         ...state,
-        recordsLag: action.payload,
+        data: action.payload,
+        totalTimeFetchConsumer: action.payload[0].data.result,
       };
     //case for Network Metrics
     case types.FETCH_NETWORK_SUCCESS:
       return {
         ...state,
+        data: action.payload,
         cpuUsage: action.payload,
       };
     default:

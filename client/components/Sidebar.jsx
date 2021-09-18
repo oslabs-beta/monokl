@@ -24,13 +24,13 @@ import SystemIcon from "@material-ui/icons/DvrOutlined";
 import NetworkIcon from "@material-ui/icons/NetworkCheckOutlined";
 import AlertSettingsIcon from "@material-ui/icons/SettingsApplicationsOutlined";
 
-import ConnectCluster from './ConnectCluster.jsx';
-import DisconnectCluster from './DisconnectCluster.jsx';
-import BrokerDisplay from './BrokerDisplay.jsx';
-import ProducerDisplay from './ProducerDisplay.jsx';
-import ConsumerDisplay from './ConsumerDisplay.jsx';
-import NetworkDisplay from './NetworkDisplay.jsx';
-import UnderConstruction from './UnderConstruction.jsx';
+import ConnectCluster from "./ConnectCluster.jsx";
+import DisconnectCluster from "./DisconnectCluster.jsx";
+import BrokerDisplay from "./BrokerDisplay.jsx";
+import ProducerDisplay from "./ProducerDisplay.jsx";
+import ConsumerDisplay from "./ConsumerDisplay.jsx";
+import NetworkDisplay from "./NetworkDisplay.jsx";
+import UnderConstruction from "./UnderConstruction.jsx";
 
 const drawerWidth = 240;
 
@@ -111,8 +111,6 @@ const useStyles = makeStyles((theme) => ({
 
 const mapStateToProps = (state) => ({ port: state.mainReducer.port });
 
-
-
 function Sidebar(props) {
   const classes = useStyles();
   const theme = useTheme();
@@ -181,21 +179,44 @@ function Sidebar(props) {
               <ListItemIcon>{<ConnectIcon />}</ListItemIcon>
               <ListItemText primary={"Connect"} />
             </ListItem>
-            <ListItem button key={"Alerts"} component={Link} to="/alerts">
+            <ListItem
+              button
+              key={"Alerts"}
+              component={Link}
+              to="/alerts"
+              onClick={() => {
+                console.log("Hello from Alerts menu");
+              }}
+            >
               <ListItemIcon>{<AlertIcon />}</ListItemIcon>
               <ListItemText primary={"Alerts"} />
             </ListItem>
-            <ListItem button key={'Broker Metrics'} component={Link} to="/broker">
+            <ListItem
+              button
+              key={"Broker Metrics"}
+              component={Link}
+              to="/broker"
+            >
               <ListItemIcon>{<HealthIcon />}</ListItemIcon>
-              <ListItemText primary={'Broker Metrics'} />
+              <ListItemText primary={"Broker Metrics"} />
             </ListItem>
-            <ListItem button key={'Producer Metrics'} component={Link} to="/producer">
+            <ListItem
+              button
+              key={"Producer Metrics"}
+              component={Link}
+              to="/producer"
+            >
               <ListItemIcon>{<SystemIcon />}</ListItemIcon>
-              <ListItemText primary={'Producer Metrics'} />
+              <ListItemText primary={"Producer Metrics"} />
             </ListItem>
-            <ListItem button key={'Consumer Metrics'} component={Link} to="/consumer">
+            <ListItem
+              button
+              key={"Consumer Metrics"}
+              component={Link}
+              to="/consumer"
+            >
               <ListItemIcon>{<SystemIcon />}</ListItemIcon>
-              <ListItemText primary={'Consumer Metrics'} />
+              <ListItemText primary={"Consumer Metrics"} />
             </ListItem>
             <ListItem
               button
@@ -225,13 +246,45 @@ function Sidebar(props) {
         </Drawer>
         <main className={classes.content}>
           <Switch>
-            <Route exact path="/" component={!props.port ? ConnectCluster : DisconnectCluster} />
-            <Route path="/alerts" component={props.port ? UnderConstruction : () => <Redirect to='/' />} />
-            <Route path="/broker" component={props.port ? BrokerDisplay : () => <Redirect to='/' />} />
-            <Route path="/producer" component={props.port ? ProducerDisplay : () => <Redirect to='/' />} />
-            <Route path="/consumer" component={props.port ? ConsumerDisplay : () => <Redirect to='/' />} />
-            <Route path="/network" component={props.port ? NetworkDisplay : () => <Redirect to='/' />} />
-            <Route path="/settings" component={props.port ? UnderConstruction : () => <Redirect to='/' />} />
+            <Route
+              exact
+              path="/"
+              component={!props.port ? ConnectCluster : DisconnectCluster}
+            />
+            <Route
+              path="/alerts"
+              component={
+                props.port ? UnderConstruction : () => <Redirect to="/" />
+              }
+            />
+            <Route
+              path="/broker"
+              component={props.port ? BrokerDisplay : () => <Redirect to="/" />}
+            />
+            <Route
+              path="/producer"
+              component={
+                props.port ? ProducerDisplay : () => <Redirect to="/" />
+              }
+            />
+            <Route
+              path="/consumer"
+              component={
+                props.port ? ConsumerDisplay : () => <Redirect to="/" />
+              }
+            />
+            <Route
+              path="/network"
+              component={
+                props.port ? NetworkDisplay : () => <Redirect to="/" />
+              }
+            />
+            <Route
+              path="/settings"
+              component={
+                props.port ? UnderConstruction : () => <Redirect to="/" />
+              }
+            />
           </Switch>
         </main>
       </HashRouter>
