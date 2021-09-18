@@ -55,9 +55,10 @@ const mainReducer = (state = initialState, action) => {
     case types.FETCH_PRODUCER_SUCCESS:
       return {
         ...state,
-        responseRate: action.payload,
-        requestRate: action.payload,
-        outgoingByteRate: action.payload,
+        // this is an array of arrays with two values
+        responseRate: action.payload[0].values,
+        // requestRate: `requestRate: ${action.payload}`,
+        // outgoingByteRate: `outgoingByteRate: ${action.payload}`,
       };
     //case for Consumer Metrics
     case types.FETCH_CONSUMER_SUCCESS:

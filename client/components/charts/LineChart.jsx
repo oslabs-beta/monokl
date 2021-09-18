@@ -8,8 +8,15 @@ const LineChart = (props) => {
     labels: props.x,
     datasets: [
       {
-        label: "# of Requests",
+        label: "# of Responses",
         data: props.y,
+        fill: false,
+        backgroundColor: "#018790",
+        borderColor: "rgba(75, 192, 192, 0.2)",
+      },
+      {
+        label: "# of Requests",
+        data: props.z,
         fill: false,
         backgroundColor: "#018790",
         borderColor: "rgba(75, 192, 192, 0.2)",

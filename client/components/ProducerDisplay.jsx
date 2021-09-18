@@ -5,6 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import BarChart from './charts/BarChart.jsx';
 import LineChart from './charts/LineChart.jsx';
 import ScoreCard from './charts/ScoreCard.jsx';
+import { connect } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -20,8 +21,35 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ProducerDisplay() {
+//use a mapstatetoprops to pass data to both line charts
+const mapStateToProps = (state) => {
+  return {
+    responseRate: state.mainReducer.responseRate,
+    requestRate: state.mainReducer.requestRate,
+    outgoingBytes: state.mainReducer.outgoingBytes
+  };
+};
+
+function ProducerDisplay(props) {
   const classes = useStyles();
+  const yAxis = props.responseRate.map((data) => Number(data[1]))
+
+  const resFetchConsumer = props.responseRate.map((data) => Number(data[0]));
+
+  // const resFetch = props.responseRate.map((data) => {
+
+  // })
+
+  // const resProduce = props.responseRate.map((data) => {
+    
+  // })
+
+  // const resOffsetCommit = props.responseRate.map((data) => {
+    
+  // })
+  // const yArray = props.bytesIn.map((data) => Number(data[1]));
+  // console.log("X ", xArray);
+  // console.log("Y ", yArray);
 
   return (
     <div className={classes.root}>
@@ -30,7 +58,7 @@ export default function ProducerDisplay() {
         <Grid item xs={12}>Producer Metrics</Grid>
 
         <Grid item xs={12} className={classes.child}>
-          <Paper className={classes.paper}><LineChart metricName={'Response Rate'}/></Paper>
+          <Paper className={classes.paper}><LineChart x={resFetchConsumer} y={yAxis} metricName={'Response Rate'}/></Paper>
         </Grid>
         <Grid item xs={12} className={classes.child}>
           <Paper className={classes.paper}><LineChart metricName={'Request Rate'}/></Paper>
@@ -54,3 +82,5 @@ export default function ProducerDisplay() {
     </div>
   );
 }
+
+export default connect(mapStateToProps, null)(ProducerDisplay);

@@ -12,6 +12,7 @@ const mapStateToProps = (state) => {
   return {
     count: state.mainReducer.count,
     data: state.mainReducer.data,
+    responseRate: state.mainReducer.responseRate
   };
 };
 
@@ -53,9 +54,9 @@ function UnderConstruction(props) {
       <h5> Items: {props.count} </h5>
 
       <button onClick={props.addCountAction}>Update Count</button>
-      <button onClick={props.makeFetch}>make Fetch</button>
+      <button onClick={props.makeProducerMetrics}>make Fetch</button>
       {/* <div> {arrayToRender} </div> */}
-      <div> Data point: {JSON.stringify(props.data)} </div>
+      <div> Data point: {JSON.stringify(props.responseRate)} </div>
     </div>
   );
 }
