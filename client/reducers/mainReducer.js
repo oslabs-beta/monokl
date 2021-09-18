@@ -51,7 +51,7 @@ const mainReducer = (state = initialState, action) => {
         data: action.payload,
         underReplicatedPartitions: action.payload[0].data.result[0].value[1],
         activeControllerCount: action.payload[1].data.result[0].value[1],
-        offlinePartitionsCount: 0,
+        offlinePartitionsCount: action.payload[2].data.result[0].value[1],
         leaderElectionRateAndTimeMs: action.payload[3].data.result[0].values,
         bytesIn: action.payload[7].data.result[0].values,
       };
