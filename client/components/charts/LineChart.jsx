@@ -8,7 +8,7 @@ const LineChart = (props) => {
     labels: props.x,
     datasets: [
       {
-        label: "# of Requests",
+        label: "# of Responses",
         data: props.y,
         fill: false,
         backgroundColor: "#018790",
