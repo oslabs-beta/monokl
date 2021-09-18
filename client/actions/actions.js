@@ -33,45 +33,45 @@ export const removePortAction = () => {
 //First: Broker Metrics
 export const fetchBrokerMetics = () => (dispatch) => {
   //0.Underreplicated partitions(Score Card)
-  let data1 = fetch(
+  let data0 = fetch(
     "http://localhost:9090/api/v1/query?query=kafka_server_replicamanager_underreplicatedpartitions"
   ).then((respose) => respose.json());
 
   //1.Active Controller Count(Score Card)
-  let data2 = fetch(
+  let data1 = fetch(
     "http://localhost:9090/api/v1/query?query=kafka_controller_kafkacontroller_activecontrollercount"
   ).then((respose) => respose.json());
 
   //2.Offline Partitions Count (Score Card)
-  let data3 = fetch(
+  let data2 = fetch(
     "http://localhost:9090/api/v1/query?query=kafka_controller_kafkacontroller_offlinepartitionscount"
   ).then((respose) => respose.json());
 
   //3.Leader Election Rate and Time Ms (Range)
-  let data4 = fetch(
+  let data3 = fetch(
     `http://localhost:9090/api/v1/query_range?query=kafka_controller_controllerstats_leaderelectionrateandtimems_count&start=2021-09-18T10:30:00.781Z&end=${new Date().toISOString()}&step=60s`
   ).then((respose) => respose.json());
 
-  //4.Total Time (Range)
+  //4.Total Time (Range) //{request=""FetchConsumer"}
+  let data4 = fetch(
+    `http://localhost:9090/api/v1/query_range?query=kafka_network_requestmetrics_totaltimems{request="FetchConsumer"}&start=2021-09-18T10:30:00.781Z&end=${new Date().toISOString()}&step=60s`
+  ).then((respose) => respose.json());
+
+  //5.Purgatory Size (Range) {delayedOperation="Fetch"}
   let data5 = fetch(
-    `http://localhost:9090/api/v1/query_range?query=Kafka_network_requestmetrics_totaltimems&start=2021-09-18T10:30:00.781Z&end=${new Date().toISOString()}&step=60s`
+    `http://localhost:9090/api/v1/query_range?query=kafka_server_delayedoperationpurgatory_purgatorysize{delayedOperation="Fetch"}&start=2021-09-18T10:30:00.781Z&end=${new Date().toISOString()}&step=60s`
   ).then((respose) => respose.json());
 
-  //Purgatory Size (Range)
+  //6.Bytes In Total (Range)
   let data6 = fetch(
-    `http://localhost:9090/api/v1/query_range?query=kafka_server_delayedoperationpurgatory_purgatorysize&start=2021-09-18T10:30:00.781Z&end=${new Date().toISOString()}&step=60s`
-  ).then((respose) => respose.json());
-
-  //Bytes In Total (Range)
-  let data7 = fetch(
     `http://localhost:9090/api/v1/query_range?query=kafka_server_brokertopicmetrics_bytesin_total&start=2021-09-18T10:30:00.781Z&end=${new Date().toISOString()}&step=60s`
   ).then((respose) => respose.json());
-  //BytesOut Total(Range)
-  let data8 = fetch(
+  //7.BytesOut Total(Range)
+  let data7 = fetch(
     `http://localhost:9090/api/v1/query_range?query=kafka_server_brokertopicmetrics_bytesout_total&start=2021-09-18T10:30:00.781Z&end=${new Date().toISOString()}&step=60s`
   ).then((respose) => respose.json());
 
-  Promise.all([data1, data2, data3, data4, data5, data6, data7, data8])
+  Promise.all([data0, data1, data2, data3, data4, data5, data6, data7])
     .then((allData) => {
       dispatch({
         type: types.FETCH_DATA_SUCCESS,

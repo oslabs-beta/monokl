@@ -53,7 +53,10 @@ const mainReducer = (state = initialState, action) => {
         activeControllerCount: action.payload[1].data.result[0].value[1],
         offlinePartitionsCount: action.payload[2].data.result[0].value[1],
         leaderElectionRateAndTimeMs: action.payload[3].data.result[0].values,
-        bytesIn: action.payload[7].data.result[0].values,
+        totalTimeMS: action.payload[4],
+        purgatorySize: action.payload[5].data.result[0].values,
+        bytesIn: action.payload[6].data.result[0].values,
+        bytesOut: action.payload[6].data.result[0].values,
       };
     //case for Producer Metrics
     case types.FETCH_PRODUCER_SUCCESS:
