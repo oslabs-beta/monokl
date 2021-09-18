@@ -21,14 +21,13 @@ export const removePortAction = () => {
     payload: "",
   };
 };
-//Step 5 create async and action creator
 
-// export const fetchDataRequest = (data) => {
-//   return {
-//     type: types.FETCH_DATA_REQUEST,
-//     payload: data,
-//   };
-// };
+export const addConnectionTimeAction = (timestamp) => {
+  return {
+    type: types.ADD_CONNECTION_TIME,
+    payload: timestamp,
+  };
+};
 
 //First: Broker Metrics // fetchBrokerMetrics
 export const makeFetch = () => (dispatch) => {
@@ -105,7 +104,7 @@ export const makeProducerMetrics = () => (dispatch) => {
       if (req.metric.request === 'Produce' && req.metric.quantile === '0.50'){
         resRateMetrics.push(req)
       }
-    });   
+    });
     return resRateMetrics;
   })
   .then((results) => {
