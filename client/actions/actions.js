@@ -1,13 +1,6 @@
 import * as types from "./actionTypes.js";
 
 //action creators below
-export const addCountAction = () => {
-  return {
-    type: types.ADD_COUNT,
-    payload: 1,
-  };
-};
-
 export const addPortAction = (userPort) => {
   return {
     type: types.ADD_PORT,
@@ -30,7 +23,7 @@ export const addConnectionTimeAction = (timestamp) => {
 };
 
 //First: Broker Metrics
-export const fetchBrokerMetics = () => (dispatch) => {
+export const fetchBrokerMetrics = () => (dispatch) => {
   //0.Underreplicated partitions(Score Card)
   let data0 = fetch(
     "http://localhost:9090/api/v1/query?query=kafka_server_replicamanager_underreplicatedpartitions"
@@ -73,7 +66,7 @@ export const fetchBrokerMetics = () => (dispatch) => {
   Promise.all([data0, data1, data2, data3, data4, data5, data6, data7])
     .then((allData) => {
       dispatch({
-        type: types.FETCH_DATA_SUCCESS,
+        type: types.FETCH_BROKER_SUCCESS,
         payload: allData,
       });
     })
@@ -127,7 +120,7 @@ export const fetchConsumerMetrics = () => (dispatch) => {
 export const fetchNetworkMetrics = () => (dispatch) => {
   //Average Idle percentage: source
   let data1 = fetch(
-    `http://localhost:9090/api/v1/query_range?query=kafka_network_socketserver_networkprocessoravgidlepercent&start=2021-09-18T10:30:00.781Z&end=${new Date().toISOString()}&step=60s`
+    `http://localhost:9090/api/v1/query_range?query=kafka_network_socketserver_networkprocessoravgidlepercent&start=2021-09-19T17:37:11.716Z&end=${new Date().toISOString()}&step=60s`
   ).then((respose) => respose.json());
 
   //CPU usage

@@ -26,13 +26,7 @@ const initialState = {
 };
 
 const mainReducer = (state = initialState, action) => {
-  // console.log("From mainReducer.js: ", state);
   switch (action.type) {
-    case types.ADD_COUNT:
-      return {
-        ...state,
-        count: state.count + action.payload, //should be hardcoded to 1
-      };
     case types.ADD_PORT:
       return {
         ...state,
@@ -49,7 +43,7 @@ const mainReducer = (state = initialState, action) => {
         connectionTime: action.payload,
       };
     //case for Fetch Data(Broker Metric)
-    case types.FETCH_DATA_SUCCESS:
+    case types.FETCH_BROKER_SUCCESS:
       return {
         ...state,
         data: action.payload,
