@@ -1,6 +1,7 @@
 import React from "react";
 import { HashRouter, Switch, Route, Redirect, Link } from "react-router-dom";
 import { connect } from "react-redux";
+// import { fetchBrokerMetrics, fetchProducerMetrics, fetchConsumerMetrics, fetchNetworkMetrics } from "../actions/actions.js";
 import clsx from "clsx";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
@@ -110,7 +111,27 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const mapStateToProps = (state) => ({ port: state.mainReducer.port });
+const mapStateToProps = (state) => ({
+  port: state.mainReducer.port,
+  data: state.mainReducer.data
+});
+
+// const mapDispatchToProps = (dispatch) => {
+//   return {
+//     fetchBrokerMetrics: () => {
+//       dispatch(fetchBrokerMetrics());
+//     },
+//     fetchProducerMetrics: () => {
+//       dispatch(fetchProducerMetrics());
+//     },
+//     fetchConsumerMetrics: () => {
+//       dispatch(fetchConsumerMetrics());
+//     },
+//     fetchNetworkMetrics: () => {
+//       dispatch(fetchNetworkMetrics());
+//     },
+//   };
+// };
 
 function Sidebar(props) {
   const classes = useStyles();
@@ -195,6 +216,7 @@ function Sidebar(props) {
             <ListItem
               button
               key={"Broker Metrics"}
+              // onClick={async () => await props.fetchBrokerMetrics()}
               component={Link}
               to="/broker"
             >
@@ -222,6 +244,7 @@ function Sidebar(props) {
             <ListItem
               button
               key={"Network Metrics"}
+              // onClick={props.fetchNetworkMetrics}
               component={Link}
               to="/network"
             >
@@ -248,15 +271,12 @@ function Sidebar(props) {
         <main className={classes.content}>
           <Switch>
             <Route
-              exact
-              path="/"
+              exact path="/"
               component={!props.port ? ConnectCluster : DisconnectCluster}
             />
             <Route
               path="/alerts"
-              component={
-                props.port ? UnderConstruction : () => <Redirect to="/" />
-              }
+              component={props.port ? UnderConstruction : () => <Redirect to="/" />}
             />
             <Route
               path="/broker"
@@ -264,27 +284,19 @@ function Sidebar(props) {
             />
             <Route
               path="/producer"
-              component={
-                props.port ? ProducerDisplay : () => <Redirect to="/" />
-              }
+              component={props.port ? ProducerDisplay : () => <Redirect to="/" />}
             />
             <Route
               path="/consumer"
-              component={
-                props.port ? ConsumerDisplay : () => <Redirect to="/" />
-              }
+              component={props.port ? ConsumerDisplay : () => <Redirect to="/" />}
             />
             <Route
               path="/network"
-              component={
-                props.port ? NetworkDisplay : () => <Redirect to="/" />
-              }
+              component={props.port ? NetworkDisplay : () => <Redirect to="/" />}
             />
             <Route
               path="/settings"
-              component={
-                props.port ? UnderConstruction : () => <Redirect to="/" />
-              }
+              component={props.port ? UnderConstruction : () => <Redirect to="/" />}
             />
           </Switch>
         </main>
