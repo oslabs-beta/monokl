@@ -149,5 +149,5 @@ export const fetchNetworkMetrics = () => (dispatch) => {
 //Sources for Metrics:
 //https://access.redhat.com/documentation/en-us/red_hat_amq/7.3/html/using_amq_streams_on_red_hat_enterprise_linux_rhel/monitoring-str
 //https://www.datadoghq.com/blog/monitoring-kafka-performance-metrics/#host-level-broker-metrics
-//https://www.datadoghq.com/blog/monitoring-kafka-performance-metrics/#host-level-broker-metrics
+//https://docs.confluent.io/platform/current/kafka/monitoring.html
 //https://stackoverflow.com/questions/63392855/how-to-interpret-kafka-broker-reported-latency-metrics
