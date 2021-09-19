@@ -33,7 +33,7 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDistpatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch) => {
   return {
     addPortAction: (userInput) => {
       dispatch(addPortAction(userInput));
@@ -107,4 +107,4 @@ function ConnectCluster(props) {
 }
 
 // export default ConnectCluster;
-export default connect(mapStateToProps, mapDistpatchToProps)(ConnectCluster);
+export default connect(mapStateToProps, mapDispatchToProps)(ConnectCluster);
