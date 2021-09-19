@@ -28,10 +28,11 @@ const useStyles = makeStyles((theme) => ({
 const mapStateToProps = (state) => {
   return {
     port: state.mainReducer.port,
+    connectionTime: state.mainReducer.connectionTime
   };
 };
 
-const mapDistpatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch) => {
   return {
     removePortAction: () => {
       dispatch(removePortAction());
@@ -46,6 +47,7 @@ function DisconnectCluster(props) {
   return (
     <>
       <h5>Port: {props.port} </h5>
+      <h5>Connection Time: {props.connectionTime} </h5>
       <form className={classes.root} noValidate autoComplete="off">
         <TextField
           id="broker"
@@ -77,4 +79,4 @@ function DisconnectCluster(props) {
 }
 
 // export default ConnectCluster;
-export default connect(mapStateToProps, mapDistpatchToProps)(DisconnectCluster);
+export default connect(mapStateToProps, mapDispatchToProps)(DisconnectCluster);

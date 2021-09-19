@@ -3,8 +3,8 @@ import * as types from "../actions/actionTypes.js";
 
 const initialState = {
   count: 0,
-  connectionTime: 0,
-  port: "9092",
+  connectionTime: '',
+  port: "",
   data: [],
   //Broker Metrics
   underReplicatedPartitions: [],
@@ -26,17 +26,10 @@ const initialState = {
 };
 
 const mainReducer = (state = initialState, action) => {
-  // console.log("From mainReducer.js: ", state);
   switch (action.type) {
-    case types.ADD_COUNT:
-      return {
-        ...state,
-        count: state.count + action.payload, //should be hardcoded to 1
-      };
     case types.ADD_PORT:
       return {
         ...state,
-        connectionTime: Date.now(),
         port: action.payload,
       };
     case types.REMOVE_PORT:
@@ -44,8 +37,13 @@ const mainReducer = (state = initialState, action) => {
         ...state,
         port: action.payload,
       };
+    case types.ADD_CONNECTION_TIME:
+      return {
+        ...state,
+        connectionTime: action.payload,
+      };
     //case for Fetch Data(Broker Metric)
-    case types.FETCH_DATA_SUCCESS:
+    case types.FETCH_BROKER_SUCCESS:
       return {
         ...state,
         data: action.payload,

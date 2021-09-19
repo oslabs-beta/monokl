@@ -1,6 +1,7 @@
 import React from "react";
 import { HashRouter, Switch, Route, Redirect, Link } from "react-router-dom";
 import { connect } from "react-redux";
+// import { fetchBrokerMetrics, fetchProducerMetrics, fetchConsumerMetrics, fetchNetworkMetrics } from "../actions/actions.js";
 import clsx from "clsx";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
@@ -19,8 +20,9 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import ConnectIcon from "@material-ui/icons/SettingsEthernetOutlined";
 import AlertIcon from "@material-ui/icons/ErrorOutlineOutlined";
-import HealthIcon from "@material-ui/icons/LocalHospitalOutlined";
-import SystemIcon from "@material-ui/icons/DvrOutlined";
+import BrokerIcon from '@mui/icons-material/OpenWithOutlined';
+import ProducerIcon from '@mui/icons-material/StoreOutlined';
+import ConsumerIcon from '@mui/icons-material/ShoppingBagOutlined';
 import NetworkIcon from "@material-ui/icons/NetworkCheckOutlined";
 import AlertSettingsIcon from "@material-ui/icons/SettingsApplicationsOutlined";
 
@@ -109,7 +111,27 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const mapStateToProps = (state) => ({ port: state.mainReducer.port });
+const mapStateToProps = (state) => ({
+  port: state.mainReducer.port,
+  data: state.mainReducer.data
+});
+
+// const mapDispatchToProps = (dispatch) => {
+//   return {
+//     fetchBrokerMetrics: () => {
+//       dispatch(fetchBrokerMetrics());
+//     },
+//     fetchProducerMetrics: () => {
+//       dispatch(fetchProducerMetrics());
+//     },
+//     fetchConsumerMetrics: () => {
+//       dispatch(fetchConsumerMetrics());
+//     },
+//     fetchNetworkMetrics: () => {
+//       dispatch(fetchNetworkMetrics());
+//     },
+//   };
+// };
 
 function Sidebar(props) {
   const classes = useStyles();
@@ -194,10 +216,11 @@ function Sidebar(props) {
             <ListItem
               button
               key={"Broker Metrics"}
+              // onClick={async () => await props.fetchBrokerMetrics()}
               component={Link}
               to="/broker"
             >
-              <ListItemIcon>{<HealthIcon />}</ListItemIcon>
+              <ListItemIcon>{<BrokerIcon />}</ListItemIcon>
               <ListItemText primary={"Broker Metrics"} />
             </ListItem>
             <ListItem
@@ -206,7 +229,7 @@ function Sidebar(props) {
               component={Link}
               to="/producer"
             >
-              <ListItemIcon>{<SystemIcon />}</ListItemIcon>
+              <ListItemIcon>{<ProducerIcon />}</ListItemIcon>
               <ListItemText primary={"Producer Metrics"} />
             </ListItem>
             <ListItem
@@ -215,12 +238,13 @@ function Sidebar(props) {
               component={Link}
               to="/consumer"
             >
-              <ListItemIcon>{<SystemIcon />}</ListItemIcon>
+              <ListItemIcon>{<ConsumerIcon />}</ListItemIcon>
               <ListItemText primary={"Consumer Metrics"} />
             </ListItem>
             <ListItem
               button
               key={"Network Metrics"}
+              // onClick={props.fetchNetworkMetrics}
               component={Link}
               to="/network"
             >
@@ -247,15 +271,12 @@ function Sidebar(props) {
         <main className={classes.content}>
           <Switch>
             <Route
-              exact
-              path="/"
+              exact path="/"
               component={!props.port ? ConnectCluster : DisconnectCluster}
             />
             <Route
               path="/alerts"
-              component={
-                props.port ? UnderConstruction : () => <Redirect to="/" />
-              }
+              component={props.port ? UnderConstruction : () => <Redirect to="/" />}
             />
             <Route
               path="/broker"
@@ -263,27 +284,19 @@ function Sidebar(props) {
             />
             <Route
               path="/producer"
-              component={
-                props.port ? ProducerDisplay : () => <Redirect to="/" />
-              }
+              component={props.port ? ProducerDisplay : () => <Redirect to="/" />}
             />
             <Route
               path="/consumer"
-              component={
-                props.port ? ConsumerDisplay : () => <Redirect to="/" />
-              }
+              component={props.port ? ConsumerDisplay : () => <Redirect to="/" />}
             />
             <Route
               path="/network"
-              component={
-                props.port ? NetworkDisplay : () => <Redirect to="/" />
-              }
+              component={props.port ? NetworkDisplay : () => <Redirect to="/" />}
             />
             <Route
               path="/settings"
-              component={
-                props.port ? UnderConstruction : () => <Redirect to="/" />
-              }
+              component={props.port ? UnderConstruction : () => <Redirect to="/" />}
             />
           </Switch>
         </main>

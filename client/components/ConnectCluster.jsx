@@ -1,9 +1,11 @@
-import React from "react";
+// import React from "react";
+import React, { useState } from "react";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
-import { addPortAction } from "../actions/actions";
+import { addPortAction, addConnectionTimeAction } from "../actions/actions";
+import PortAlert from './PortAlert.jsx';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -31,11 +33,14 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDistpatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch) => {
   return {
     addPortAction: (userInput) => {
       dispatch(addPortAction(userInput));
     },
+    addConnectionTimeAction: (timestamp) => {
+      dispatch(addConnectionTimeAction(timestamp));
+    }
   };
 };
 
@@ -56,20 +61,23 @@ const verifyPort = async (port) => {
 //component
 function ConnectCluster(props) {
   const classes = useStyles();
+  const [attempts, addAttempt] = useState(0);
 
   return (
     <>
       <h5>Port: {props.port} </h5>
       <form className={classes.root} noValidate autoComplete="off">
-        <TextField
+        {/* <TextField
           id="broker"
           label="Broker Port"
           type="search"
           variant="outlined"
-        />
+        /> */}
+        {/* {attempts > 0 ? <TextField id="prometheus" label="Prometheus Port" type="search" variant="outlined"/> : <Button />} */}
+        {attempts > 0 ? <PortAlert /> : <></> }
         <TextField
-          id="exporter"
-          label="Exporter Port"
+          id="prometheus"
+          label="Prometheus Port"
           type="search"
           variant="outlined"
         />
@@ -80,10 +88,15 @@ function ConnectCluster(props) {
           href="#contained-buttons"
           onClick={async (e) => {
             e.preventDefault();
-            const userPort = document.getElementById('exporter').value;
+            const userPort = document.getElementById('prometheus').value;
             const verified = await verifyPort(userPort);
+            const timestamp = new Date().toISOString();
             console.log('on click -> ', verified);
-            if (verified) props.addPortAction(userPort);
+            if (verified) {
+              props.addPortAction(userPort);
+              props.addConnectionTimeAction(timestamp);
+            }
+            else addAttempt(attempts + 1);
           }}
         >
           Connect
@@ -94,4 +107,4 @@ function ConnectCluster(props) {
 }
 
 // export default ConnectCluster;
-export default connect(mapStateToProps, mapDistpatchToProps)(ConnectCluster);
+export default connect(mapStateToProps, mapDispatchToProps)(ConnectCluster);

@@ -1,8 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import {
-  addCountAction,
-  fetchBrokerMetics,
+  fetchBrokerMetrics,
   fetchProducerMetrics,
   fetchConsumerMetrics,
   fetchNetworkMetrics,
@@ -14,13 +13,10 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDistpatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    addCountAction: () => {
-      dispatch(addCountAction);
-    },
-    fetchBrokerMetics: () => {
-      dispatch(fetchBrokerMetics());
+    fetchBrokerMetrics: () => {
+      dispatch(fetchBrokerMetrics());
     },
     fetchProducerMetrics: () => {
       dispatch(fetchProducerMetrics());
@@ -41,7 +37,7 @@ function UnderConstruction(props) {
       <h5> Items: {props.count} </h5>
 
       <button onClick={props.addCountAction}>Update Count</button>
-      <button onClick={props.fetchNetworkMetrics}>make Fetch</button>
+      <button onClick={props.fetchBrokerMetrics}>make Fetch</button>
 
       <div> Data point: {JSON.stringify(props.data)} </div>
     </div>
@@ -49,4 +45,4 @@ function UnderConstruction(props) {
 }
 
 // export default UnderConstruction
-export default connect(mapStateToProps, mapDistpatchToProps)(UnderConstruction);
+export default connect(mapStateToProps, mapDispatchToProps)(UnderConstruction);
