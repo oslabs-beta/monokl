@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
@@ -25,53 +25,65 @@ const useStyles = makeStyles((theme) => ({
 //use a mapstatetoprops to pass data to both line charts
 const mapStateToProps = (state) => {
   return {
-    totalTimeProduce: state.mainReducer.totalTimeProduce,
-    totalProducerRequest: state.mainReducer.totalProducerRequest,
-    failedProducerRequest: state.mainReducer.failedProducerRequest,
+    port: state.mainReducer.port,
+    connectionTime: state.mainReducer.connectionTime
   };
 };
 
 function ProducerDisplay(props) {
-  // console.log("props.totalTimeProduce :", props.totalTimeProduce);
-  // console.log("75th object:", props.totalTimeProduce[1].values);
 
-  console.log(" Failed :", props.failedProducerRequest);
-  //Total Time MS,{Produce}
-  const xArray50 = props.totalTimeProduce[0].values.map((data) => {
-    let date = new Date(data[0]);
-    return date.getTime();
-  });
-  const yArray50 = props.totalTimeProduce[0].values.map((data) =>
-    Number(data[1])
-  );
-  const yArray75 = props.totalTimeProduce[1].values.map((data) =>
-    Number(data[1])
-  );
-  const yArray95 = props.totalTimeProduce[2].values.map((data) =>
-    Number(data[1])
-  );
-  const yArray99 = props.totalTimeProduce[4].values.map((data) =>
-    Number(data[1])
-  );
+  const [xArray50, setXArray] = useState([]);
+  const [yArray50, setYArray50] = useState([]);
+  const [yArray75, setYArray75] = useState([]);
+  const [yArray95, setYArray95] = useState([]);
+  const [yArray99, setYArray99] = useState([]);
+  const [xArrayTotalProducer, setXArrayTotalProducer] = useState([]);
+  const [yArrayTotalProducer, setYArrayTotalProducer] = useState([]);
+  const [xFailedProducerRequest, setXArrayFailedProducerRequest] = useState([]);
+  const [yFailedProducerRequest, setYArrayFailedProducerRequest] = useState([]);
 
-  //totalProducerRequest
-  const xArrayTotalProducer = props.totalProducerRequest.map((data) => {
-    let date = new Date(data[0]);
-    return date.getTime();
-  });
-  const yArrayTotalProducer = props.totalProducerRequest.map((data) =>
-    Number(data[1])
-  );
-
-  //failedProducerRequest
-
-  const xFailedProducerRequest = props.failedProducerRequest.map((data) => {
-    let date = new Date(data[0]);
-    return date.getTime();
-  });
-  const yFailedProducerRequest = props.failedProducerRequest.map((data) =>
-    Number(data[1])
-  );
+  useEffect(() => {
+      //0.Total Time (Range) //{request="Produce"}- this measures number of Produce requests that were measured since the broker went up
+    let totalTimeMs = fetch(
+      `http://localhost:${props.port}/api/v1/query_range?query=kafka_network_requestmetrics_totaltimems{request="Produce"}&start=${props.connectionTime}&end=${new Date().toISOString()}&step=60s`
+    ).then((respose) => respose.json());
+  
+    //1. Total Producer Requests Total (Aggregate)
+    let producerReqsTotal = fetch(
+      `http://localhost:${props.port}/api/v1/query_range?query=kafka_server_brokertopicmetrics_totalproducerequests_total&start=${props.connectionTime}&end=${new Date().toISOString()}&step=60s`
+    ).then((respose) => respose.json());
+  
+    //2. Failed Producer Requests (Aggregate)
+    let failedProducerReqs = fetch(
+      `http://localhost:${props.port}/api/v1/query_range?query=kafka_server_brokertopicmetrics_failedproducerequests_total&start=${props.connectionTime}&end=${new Date().toISOString()}&step=60s`
+    ).then((respose) => respose.json());
+  
+    Promise.all([totalTimeMs, producerReqsTotal, failedProducerReqs])
+    .then((allData) => {
+        // Total Time in ms Chart
+        setXArray(allData[0].data.result[0].values.map((data) => {
+          let date = new Date(data[0]);
+          return date.getTime();
+        }))
+        setYArray50(allData[0].data.result[0].values.map((data) => Number(data[1])))
+        setYArray75(allData[0].data.result[1].values.map((data) => Number(data[1])))
+        setYArray95(allData[0].data.result[2].values.map((data) => Number(data[1])))
+        setYArray99(allData[0].data.result[4].values.map((data) => Number(data[1])))
+        // Total Producer Requests Chart
+        setXArrayTotalProducer(allData[1].data.result[0].values.map((data) => {
+          let date = new Date(data[0]);
+          return date.getTime();
+        }))
+        setYArrayTotalProducer(allData[1].data.result[0].values.map((data)=> Number(data[1])))
+        // Failed Producer Requests Chart
+        setXArrayFailedProducerRequest(allData[2].data.result[0].values.map((data) => {
+          let date = new Date(data[0]);
+          return date.getTime();
+        }))
+        setYArrayFailedProducerRequest(allData[2].data.result[0].values.map((data) => Number(data[1])))
+      })
+      .catch(console.error);
+  }, []);
 
   const classes = useStyles();
 
