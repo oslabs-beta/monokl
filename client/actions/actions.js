@@ -126,16 +126,14 @@ export const fetchConsumerMetrics = () => (dispatch) => {
 
 //Fourth: Network Metrics
 export const fetchNetworkMetrics = () => (dispatch) => {
-  //Disk usage
+  //Average Idle percentage: source
   let data1 = fetch(
-    "http://localhost:9090/api/v1/query?query=process_virtual_memory_bytes"
-    //`http://localhost:9090/api/v1/query_range?query=process_virtual_memory_bytes&start=2021-09-17T10:30:00.781Z&end=${new Date().toISOString()}&step=60s`
+    `http://localhost:9090/api/v1/query_range?query=kafka_network_socketserver_networkprocessoravgidlepercent&start=2021-09-18T10:30:00.781Z&end=${new Date().toISOString()}&step=60s`
   ).then((respose) => respose.json());
 
   //CPU usage
   let data2 = fetch(
     "http://localhost:9090/api/v1/query?query=process_cpu_seconds_total"
-    //`http://localhost:9090/api/v1/query_range?query=process_cpu_seconds_total&start=2021-09-17T10:30:00.781Z&end=${new Date().toISOString()}&step=60s`
   ).then((respose) => respose.json());
 
   Promise.all([data1, data2])
@@ -148,34 +146,8 @@ export const fetchNetworkMetrics = () => (dispatch) => {
     .catch(console.error);
 };
 
-//"http://localhost:9090/api/v1/query_range?query=kafka_server_brokertopicmetrics_bytesin_total&start=2021-09-16T15:00:30.781Z&end=2021-09-16T15:49:00.781Z&step=15s"(
-//how to make this request modular.
-// "http://localhost:9090/api/v1/query?query=jmx_scrape_duration_seconds"
-//https://jsonplaceholder.typicode.com/users
-
-// Promise.all([
-//   fetch("http://localhost:9090/api/v1/query?query=kafka_cluster_partition_replicascount"),
-//   fetch("http://localhost:9090/api/v1/query?query=kafka_cluster_partition_underreplicated"),
-// ])
-//   .then((res) => res.json())
-//   .then((data) => {
-//     dispatch({
-//       type: types.FETCH_DATA_SUCCESS,
-//       payload: data,
-//     });
-//   })
-//   .catch(console.error);
-
-// export const makeFetch = () => (dispatch) => {
-//   //make your fetch request,
-//   //when it resolves, take the data and send a dispatch
-//   fetch("http://localhost:9090/metrics")
-//     .then((res) => res.json())
-//     .then((data) => {
-//       dispatch({
-//         type: types.FETCH_DATA_SUCCESS,
-//         payload: data,
-//       });
-//     })
-//     .catch(console.error);
-// };
+//Sources for Metrics:
+//https://access.redhat.com/documentation/en-us/red_hat_amq/7.3/html/using_amq_streams_on_red_hat_enterprise_linux_rhel/monitoring-str
+//https://www.datadoghq.com/blog/monitoring-kafka-performance-metrics/#host-level-broker-metrics
+//https://www.datadoghq.com/blog/monitoring-kafka-performance-metrics/#host-level-broker-metrics
+//https://stackoverflow.com/questions/63392855/how-to-interpret-kafka-broker-reported-latency-metrics
