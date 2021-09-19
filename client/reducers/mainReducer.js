@@ -22,7 +22,7 @@ const initialState = {
   //Consumer Metrics
   totalTimeFetchConsumer: 0,
   //NetworkMetrics
-  cpuUsage: 0,
+  idlePercent: 0,
 };
 
 const mainReducer = (state = initialState, action) => {
@@ -83,7 +83,7 @@ const mainReducer = (state = initialState, action) => {
       return {
         ...state,
         data: action.payload,
-        cpuUsage: action.payload,
+        idlePercent: action.payload[0].data.result[0].values,
       };
     default:
       return state;

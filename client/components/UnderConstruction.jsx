@@ -41,7 +41,7 @@ function UnderConstruction(props) {
       <h5> Items: {props.count} </h5>
 
       <button onClick={props.addCountAction}>Update Count</button>
-      <button onClick={props.fetchConsumerMetrics}>make Fetch</button>
+      <button onClick={props.fetchNetworkMetrics}>make Fetch</button>
 
       <div> Data point: {JSON.stringify(props.data)} </div>
     </div>
