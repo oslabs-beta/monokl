@@ -103,10 +103,10 @@ function BrokerDisplay(props) {
         
         //4. Leader Election Rate Ms Chart
         setXArrayLeader(allData[3].data.result[0].values.map((data) => {
-          console.log('this is data: ',data[0])
-          let date = new Date(data[0]);
+          console.log('this is data: ', data[0])
+          let date = new Date(data[0] * 1000);
           console.log('this is new Date: ', date)
-          let time = date.getTime();
+          let time = date.toLocaleTimeString('en-GB');
           console.log('this is time: ', time)
           return time;
         }))
