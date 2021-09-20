@@ -1,9 +1,12 @@
 import React from "react";
-import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
-import { makeStyles } from "@material-ui/core/styles";
-import { connect } from "react-redux";
 import { removePortAction } from "../actions/actions";
+import { connect } from "react-redux";
+//Material UI - Core
+import {TextField, Button } from "@material-ui/core"
+//Material UI - Styles
+import { makeStyles } from "@material-ui/core/styles";
+
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -78,5 +81,4 @@ function DisconnectCluster(props) {
   );
 }
 
-// export default ConnectCluster;
 export default connect(mapStateToProps, mapDispatchToProps)(DisconnectCluster);

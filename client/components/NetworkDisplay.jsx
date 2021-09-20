@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { fetchNetworkMetrics } from "../actions/actions.js";
-import { makeStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
-import Grid from "@material-ui/core/Grid";
-import BarChart from "./charts/BarChart.jsx";
-import LineChart from "./charts/LineChart.jsx";
-import ScoreCard from "./charts/ScoreCard.jsx";
 import { connect } from "react-redux";
+import { makeStyles } from "@material-ui/core/styles";
+//Material UI - Core
+import {Paper, Grid } from "@material-ui/core"
+//Application Chart Components 
+import LineChart from "./charts/LineChart.jsx";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -38,7 +36,8 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 function NetworkDisplay(props) {
-
+  const classes = useStyles();
+  // component state properties chart x and y axis
   const [xArrayIdle, setXArray] = useState([]);
   const [yArrayIdle, setYArray] = useState([]);
 
@@ -48,6 +47,7 @@ function NetworkDisplay(props) {
     )
     .then((response) => response.json())
     .then((res)=>{
+      //1. Network Processor Avg Idle Percentage
       setXArray(res.data.result[0].values.map((data) => {
         let date = new Date(data[0]);
         return date.getTime()})
@@ -55,10 +55,8 @@ function NetworkDisplay(props) {
       setYArray(res.data.result[0].values.map((data) => Number(data[1])))
       console.log('this is x and y array: ', setXArray, setYArray)
     })
-    .catch(console.error)
+    .catch(err => console.log(err))
   }, []);
-
-  const classes = useStyles();
 
     return (
       <div className={classes.root}>
@@ -66,7 +64,7 @@ function NetworkDisplay(props) {
           <Grid item xs={12}>
             Network Metrics
           </Grid>
-
+          {/* 1. network Processor Avg Idle Percentage */}
           <Grid item xs={12} className={classes.child}>
             <Paper className={classes.paper}>
               <LineChart
