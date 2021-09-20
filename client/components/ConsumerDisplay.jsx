@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
@@ -23,30 +23,35 @@ const useStyles = makeStyles((theme) => ({
 
 const mapStateToProps = (state) => {
   return {
-    data: state.mainReducer.data,
-    totalTimeFetchConsumer: state.mainReducer.totalTimeFetchConsumer,
+    port: state.mainReducer.port,
+    connectionTime: state.mainReducer.connectionTime
   };
 };
 
 function ConsumerDisplay(props) {
-  console.log("props.totalTimeFetchConsumer : ", props.totalTimeFetchConsumer);
 
-  const xArray50 = props.totalTimeFetchConsumer[0].values.map((data) => {
-    let date = new Date(data[0]);
-    return date.getTime();
-  });
-  const yArray50 = props.totalTimeFetchConsumer[0].values.map((data) =>
-    Number(data[1])
-  );
-  const yArray75 = props.totalTimeFetchConsumer[1].values.map((data) =>
-    Number(data[1])
-  );
-  const yArray95 = props.totalTimeFetchConsumer[2].values.map((data) =>
-    Number(data[1])
-  );
-  const yArray99 = props.totalTimeFetchConsumer[4].values.map((data) =>
-    Number(data[1])
-  );
+  const [xArray50, setXArray] = useState([]);
+  const [yArray50, setYArray50] = useState([]);
+  const [yArray75, setXArray75] = useState([]);
+  const [yArray95, setXArray95] = useState([]);
+  const [yArray99, setXArray99] = useState([]);
+
+  useEffect(() => {
+    fetch(
+      `http://localhost:${props.port}/api/v1/query_range?query=kafka_network_requestmetrics_totaltimems{request="FetchConsumer"}&start=${props.connectionTime}&end=${new Date().toISOString()}&step=60s`
+    )
+    .then((respose) => respose.json())
+    .then((res) => {
+      setXArray(res.data.result[0].values.map((data) => {
+        let date = new Date(data[0]);
+        return date.getTime();
+      }))
+      setYArray50(res.data.result[0].values.map((data) => Number(data[1])))
+      setXArray75(res.data.result[1].values.map((data) => Number(data[1])))
+      setXArray95(res.data.result[2].values.map((data) => Number(data[1])))
+      setXArray99(res.data.result[4].values.map((data) => Number(data[1])))
+    })
+  }, []);
 
   const classes = useStyles();
 
