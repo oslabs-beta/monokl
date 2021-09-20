@@ -8,6 +8,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import LineChart from "./charts/LineChart.jsx";
 import MultipleLineChart from "./charts/MultipleLineChart.jsx";
 import ScoreCard from "./charts/ScoreCard.jsx";
+//Time Function
+import { timeFunction } from "./timeFunction.js";
 
 
 
@@ -46,20 +48,23 @@ function ProducerDisplay(props) {
   const [xFailedProducerRequest, setXArrayFailedProducerRequest] = useState([]);
   const [yFailedProducerRequest, setYArrayFailedProducerRequest] = useState([]);
 
+  //calculate the interval
+  let interval = timeFunction(props.connectionTime);
+  
   useEffect(() => {
     //1. Total Time for Producer Requests
     let totalTimeMs = fetch(
-      `http://localhost:${props.port}/api/v1/query_range?query=kafka_network_requestmetrics_totaltimems{request="Produce"}&start=${props.connectionTime}&end=${new Date().toISOString()}&step=60s`
+      `http://localhost:${props.port}/api/v1/query_range?query=kafka_network_requestmetrics_totaltimems{request="Produce"}&start=${props.connectionTime}&end=${new Date().toISOString()}&step=${interval.toString()}s`
     ).then((respose) => respose.json());
   
     //2. Total Producer Requests= (Aggregate)
     let producerReqsTotal = fetch(
-      `http://localhost:${props.port}/api/v1/query_range?query=kafka_server_brokertopicmetrics_totalproducerequests_total&start=${props.connectionTime}&end=${new Date().toISOString()}&step=60s`
+      `http://localhost:${props.port}/api/v1/query_range?query=kafka_server_brokertopicmetrics_totalproducerequests_total&start=${props.connectionTime}&end=${new Date().toISOString()}&step=${interval.toString()}s`
     ).then((respose) => respose.json());
   
     //3. Failed Producer Requests (Aggregate)
     let failedProducerReqs = fetch(
-      `http://localhost:${props.port}/api/v1/query_range?query=kafka_server_brokertopicmetrics_failedproducerequests_total&start=${props.connectionTime}&end=${new Date().toISOString()}&step=60s`
+      `http://localhost:${props.port}/api/v1/query_range?query=kafka_server_brokertopicmetrics_failedproducerequests_total&start=${props.connectionTime}&end=${new Date().toISOString()}&step=${interval.toString()}s`
     ).then((respose) => respose.json());
   
     Promise.all([totalTimeMs, producerReqsTotal, failedProducerReqs])
@@ -105,7 +110,7 @@ function ProducerDisplay(props) {
                 "Quantile 95",
                 "Quantile 99",
               ]}
-              metricName={"Total Time ms Produce"}
+              metricName={"Producer Request Time in Ms"}
               xtime={xArray50}
               y50={yArray50}
               y75={yArray75}
@@ -119,6 +124,7 @@ function ProducerDisplay(props) {
           <Paper className={classes.paper}>
             <LineChart
               metricName={"Total Producer Requests (Aggregate)"}
+              label={'Request Total'}
               x={xArrayTotalProducer}
               y={yArrayTotalProducer}
             />
@@ -129,6 +135,7 @@ function ProducerDisplay(props) {
           <Paper className={classes.paper}>
             <LineChart
               metricName={"Failed Producer Requests"}
+              label={"Failed Request Total"}
               x={xFailedProducerRequest}
               y={yFailedProducerRequest}
             />

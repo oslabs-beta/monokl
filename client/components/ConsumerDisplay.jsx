@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import {Paper, Grid } from "@material-ui/core"
 //App Chart Components
 import MultipleLineChart from "./charts/MultipleLineChart.jsx";
-
+import { timeFunction } from "./timeFunction.js";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -38,9 +38,12 @@ function ConsumerDisplay(props) {
   const [yArray95, setXArray95] = useState([]);
   const [yArray99, setXArray99] = useState([]);
 
+  //calculate the interval
+  let interval = timeFunction(props.connectionTime);
+
   useEffect(() => {
     fetch(
-      `http://localhost:${props.port}/api/v1/query_range?query=kafka_network_requestmetrics_totaltimems{request="FetchConsumer"}&start=${props.connectionTime}&end=${new Date().toISOString()}&step=60s`
+      `http://localhost:${props.port}/api/v1/query_range?query=kafka_network_requestmetrics_totaltimems{request="FetchConsumer"}&start=${props.connectionTime}&end=${new Date().toISOString()}&step=${interval.toString()}s`
     )
     .then((respose) => respose.json())
     .then((res) => {
@@ -73,7 +76,7 @@ function ConsumerDisplay(props) {
                 "Quantile 95",
                 "Quantile 99",
               ]}
-              metricName={"Total Time ms Consumer"}
+              metricName={"Fetch Consumer Total Time Ms"}
               xtime={xArray50}
               y50={yArray50}
               y75={yArray75}

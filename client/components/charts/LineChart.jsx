@@ -6,7 +6,7 @@ const LineChart = (props) => {
     labels: props.x,
     datasets: [
       {
-        label: "# of Responses",
+        label: props.label,
         data: props.y,
         fill: false,
         backgroundColor: "#018790",

@@ -5,6 +5,10 @@ import { makeStyles } from "@material-ui/core/styles";
 import {Paper, Grid } from "@material-ui/core"
 //Application Chart Components 
 import LineChart from "./charts/LineChart.jsx";
+//Time Function
+import { timeFunction } from "./timeFunction.js";
+
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -41,9 +45,12 @@ function NetworkDisplay(props) {
   const [xArrayIdle, setXArray] = useState([]);
   const [yArrayIdle, setYArray] = useState([]);
 
+  //calculate the interval
+  let interval = timeFunction(props.connectionTime);
+
   useEffect(() => {
     fetch(
-      `http://localhost:${props.port}/api/v1/query_range?query=kafka_network_socketserver_networkprocessoravgidlepercent&start=${props.connectionTime}&end=${new Date().toISOString()}&step=60s`
+      `http://localhost:${props.port}/api/v1/query_range?query=kafka_network_socketserver_networkprocessoravgidlepercent&start=${props.connectionTime}&end=${new Date().toISOString()}&step=${interval.toString()}s`
     )
     .then((response) => response.json())
     .then((res)=>{
@@ -68,7 +75,8 @@ function NetworkDisplay(props) {
           <Grid item xs={12} className={classes.child}>
             <Paper className={classes.paper}>
               <LineChart
-                metricName={"Network processor average idle percent"}
+                metricName={"Network Processor"}
+                label={"Average Idle Percentage"}
                 x={xArrayIdle}
                 y={yArrayIdle}
               />

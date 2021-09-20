@@ -6,7 +6,8 @@ import {Paper, Grid } from "@material-ui/core"
 //Chart Components
 import LineChart from "./charts/LineChart.jsx";
 import ScoreCard from "./charts/ScoreCard.jsx";
-
+//Time Function
+import { timeFunction } from "./timeFunction.js";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -46,6 +47,9 @@ function BrokerDisplay(props) {
   const [xArrayOut, setXArrayOut] = useState([]);
   const [yArrayOut, setYArrayOut] = useState([]);
 
+ //calculate the interval
+ let interval = timeFunction(props.connectionTime);
+
   useEffect(() => {
     //1. Under Replicated Partitions Count (Score Card)
     let underReplicated = fetch(
@@ -64,26 +68,26 @@ function BrokerDisplay(props) {
   
     //4. Leader Election Rate and Time Ms
     let leaderElectionRateMs = fetch(
-      `http://localhost:${props.port}/api/v1/query_range?query=kafka_controller_controllerstats_leaderelectionrateandtimems_count&start=${props.connectionTime}&end=${new Date().toISOString()}&step=60s`
+      `http://localhost:${props.port}/api/v1/query_range?query=kafka_controller_controllerstats_leaderelectionrateandtimems_count&start=${props.connectionTime}&end=${new Date().toISOString()}&step=${interval.toString()}s`
     ).then((respose) => respose.json());
   
     //5. Fetch Consumer Total Time
     let fetchConsumerTime = fetch(
-      `http://localhost:${props.port}/api/v1/query_range?query=kafka_network_requestmetrics_totaltimems{request="FetchConsumer"}&start=${props.connectionTime}&end=${new Date().toISOString()}&step=60s`
+      `http://localhost:${props.port}/api/v1/query_range?query=kafka_network_requestmetrics_totaltimems{request="FetchConsumer"}&start=${props.connectionTime}&end=${new Date().toISOString()}&step=${interval.toString()}s`
     ).then((respose) => respose.json());
   
     //6. Purgatory Size
     let purgatorySizeFetch = fetch(
-      `http://localhost:${props.port}/api/v1/query_range?query=kafka_server_delayedoperationpurgatory_purgatorysize{delayedOperation="Fetch"}&start=${props.connectionTime}&end=${new Date().toISOString()}&step=60s`
+      `http://localhost:${props.port}/api/v1/query_range?query=kafka_server_delayedoperationpurgatory_purgatorysize{delayedOperation="Fetch"}&start=${props.connectionTime}&end=${new Date().toISOString()}&step=${interval.toString()}s`
     ).then((respose) => respose.json());
   
     //7. Bytes In Total (Range)
     let bytesIn = fetch(
-      `http://localhost:${props.port}/api/v1/query_range?query=kafka_server_brokertopicmetrics_bytesin_total&start=${props.connectionTime}&end=${new Date().toISOString()}&step=60s`
+      `http://localhost:${props.port}/api/v1/query_range?query=kafka_server_brokertopicmetrics_bytesin_total&start=${props.connectionTime}&end=${new Date().toISOString()}&step=${interval.toString()}s`
     ).then((respose) => respose.json());
     //8. Bytes Out Total (Range)
     let bytesOut = fetch(
-      `http://localhost:${props.port}/api/v1/query_range?query=kafka_server_brokertopicmetrics_bytesout_total&start=${props.connectionTime}&end=${new Date().toISOString()}&step=60s`
+      `http://localhost:${props.port}/api/v1/query_range?query=kafka_server_brokertopicmetrics_bytesout_total&start=${props.connectionTime}&end=${new Date().toISOString()}&step=${interval.toString()}s`
     ).then((respose) => respose.json());
 
     Promise.all([underReplicated, activeController, offlinePartitions, leaderElectionRateMs, fetchConsumerTime, purgatorySizeFetch, bytesIn, bytesOut])
@@ -99,8 +103,12 @@ function BrokerDisplay(props) {
         
         //4. Leader Election Rate Ms Chart
         setXArrayLeader(allData[3].data.result[0].values.map((data) => {
+          console.log('this is data: ',data[0])
           let date = new Date(data[0]);
-          return date.getTime()
+          console.log('this is new Date: ', date)
+          let time = date.getTime();
+          console.log('this is time: ', time)
+          return time;
         }))
         setYArrayLeader(allData[3].data.result[0].values.map((data) => Number(data[1])))
         
@@ -174,6 +182,7 @@ function BrokerDisplay(props) {
             <Paper className={classes.paper}>
               <LineChart
                 metricName={"Leader Election Rate and Time Ms"}
+                label={'Rate per Millisecond'}
                 x={xArrayLeader}
                 y={yArrayLeader}
               />
@@ -183,7 +192,8 @@ function BrokerDisplay(props) {
           <Grid item xs={12} className={classes.child}>
             <Paper className={classes.paper}>
               <LineChart
-                metricName={"Total Time Ms FetchConsumer 50th"}
+                metricName={"Fetch Consumer Request Time Ms"}
+                label={'Rate per Millisecond'}
                 x={xArrayTTFetch}
                 y={yArrayTTFetch}
               />
@@ -193,7 +203,8 @@ function BrokerDisplay(props) {
           <Grid item xs={12} className={classes.child}>
             <Paper className={classes.paper}>
               <LineChart
-                metricName={"Purgatory Size Fetch Request"}
+                metricName={"Fetch Request Purgatory Size"}
+                label={'Rate per Millisecond'}
                 x={xArrayPurg}
                 y={yArrayPurg}
               />
@@ -204,6 +215,7 @@ function BrokerDisplay(props) {
             <Paper className={classes.paper}>
               <LineChart
                 metricName={"Bytes In Per Sec"}
+                label={'Rate per Second'}
                 x={xArrayIn}
                 y={yArrayIn}
               />
@@ -214,6 +226,7 @@ function BrokerDisplay(props) {
             <Paper className={classes.paper}>
               <LineChart
                 metricName={"Bytes Out Per Sec"}
+                label={'Rate per Second'}
                 x={xArrayOut}
                 y={yArrayOut}
               />
