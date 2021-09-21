@@ -27,6 +27,8 @@ import ProducerDisplay from "./ProducerDisplay.jsx";
 import ConsumerDisplay from "./ConsumerDisplay.jsx";
 import NetworkDisplay from "./NetworkDisplay.jsx";
 import UnderConstruction from "./UnderConstruction.jsx";
+//Logo
+import Logo from "../images/monokl_white.svg";
 
 const drawerWidth = 240;
 
@@ -135,9 +137,10 @@ function Sidebar(props) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h5" noWrap>
-            Monokl
-          </Typography>
+          <Logo />
+          {/* <Typography variant="h5" noWrap>
+            <img src={Logo}/>
+          </Typography> */}
         </Toolbar>
       </AppBar>
       <HashRouter>
