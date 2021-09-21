@@ -56,9 +56,9 @@ function NetworkDisplay(props) {
     .then((res)=>{
       //1. Network Processor Avg Idle Percentage
       setXArray(res.data.result[0].values.map((data) => {
-        let date = new Date(data[0]);
-        return date.getTime()})
-      )
+        let date = new Date(data[0] * 1000);
+        return date.toLocaleTimeString('en-GB');
+      }))
       setYArray(res.data.result[0].values.map((data) => Number(data[1])))
       console.log('this is x and y array: ', setXArray, setYArray)
     })

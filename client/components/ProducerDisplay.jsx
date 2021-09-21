@@ -71,8 +71,8 @@ function ProducerDisplay(props) {
       .then((allData) => {
         //1. Total Time in Ms for Producer Requests
         setXArray(allData[0].data.result[0].values.map((data) => {
-          let date = new Date(data[0]);
-          return date.getTime();
+          let date = new Date(data[0] * 1000);
+          return date.toLocaleTimeString('en-GB');
         }))
         setYArray50(allData[0].data.result[0].values.map((data) => Number(data[1])))
         setYArray75(allData[0].data.result[1].values.map((data) => Number(data[1])))
@@ -80,14 +80,14 @@ function ProducerDisplay(props) {
         setYArray99(allData[0].data.result[4].values.map((data) => Number(data[1])))
         //2. Total Producer Requests Chart
         setXArrayTotalProducer(allData[1].data.result[0].values.map((data) => {
-          let date = new Date(data[0]);
-          return date.getTime();
+          let date = new Date(data[0] * 1000);
+          return date.toLocaleTimeString('en-GB');
         }))
         setYArrayTotalProducer(allData[1].data.result[0].values.map((data)=> Number(data[1])))
         //3. Failed Producer Requests Chart
         setXArrayFailedProducerRequest(allData[2].data.result[0].values.map((data) => {
-          let date = new Date(data[0]);
-          return date.getTime();
+          let date = new Date(data[0] * 1000);
+          return date.toLocaleTimeString('en-GB');
         }))
         setYArrayFailedProducerRequest(allData[2].data.result[0].values.map((data) => Number(data[1])))
       })

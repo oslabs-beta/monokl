@@ -103,40 +103,36 @@ function BrokerDisplay(props) {
         
         //4. Leader Election Rate Ms Chart
         setXArrayLeader(allData[3].data.result[0].values.map((data) => {
-          console.log('this is data: ', data[0])
           let date = new Date(data[0] * 1000);
-          console.log('this is new Date: ', date)
-          let time = date.toLocaleTimeString('en-GB');
-          console.log('this is time: ', time)
-          return time;
+          return date.toLocaleTimeString('en-GB');
         }))
         setYArrayLeader(allData[3].data.result[0].values.map((data) => Number(data[1])))
         
         //5. Fetch Consumer Time Chart
         setXArrayTTFetch(allData[4].data.result[0].values.map((data) => {
-          let date = new Date(data[0]);
-          return date.getTime();
+          let date = new Date(data[0] * 1000);
+          return date.toLocaleTimeString('en-GB');
         }));
         setYArrayTTFetch(allData[4].data.result[0].values.map((data) => Number(data[1])));
 
         //6. Purgatory Size Chart
         setXArrayPurg(allData[5].data.result[0].values.map((data) => {
-          let date = new Date(data[0]);
-          return date.getTime();
+          let date = new Date(data[0] * 1000);
+          return date.toLocaleTimeString('en-GB');
         }));
         setYArrayPurg(allData[5].data.result[0].values.map((data) => Number(data[1])));
 
         //7. Bytes In Chart
         setXArrayIn(allData[6].data.result[0].values.map((data) => {
-          let date = new Date(data[0]);
-          return date.getTime();
+          let date = new Date(data[0] * 1000);
+          return date.toLocaleTimeString('en-GB');
         }));
         setYArrayIn(allData[6].data.result[0].values.map((data) => Number(data[1])));
 
         //8. Bytes Out Chart
         setXArrayOut(allData[7].data.result[0].values.map((data) => {
-          let date = new Date(data[0]);
-          return date.getTime();
+          let date = new Date(data[0] * 1000);
+          return date.toLocaleTimeString('en-GB');
         }));
         setYArrayOut(allData[7].data.result[0].values.map((data) => Number(data[1])));
       })

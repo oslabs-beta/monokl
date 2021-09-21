@@ -49,8 +49,8 @@ function ConsumerDisplay(props) {
     .then((res) => {
       // 1. Network Request Metrics Time
       setXArray(res.data.result[0].values.map((data) => {
-        let date = new Date(data[0]);
-        return date.getTime();
+        let date = new Date(data[0] * 1000);
+        return date.toLocaleTimeString('en-GB');
       }))
       setYArray50(res.data.result[0].values.map((data) => Number(data[1])))
       setXArray75(res.data.result[1].values.map((data) => Number(data[1])))
