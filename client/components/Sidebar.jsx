@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-//React Router 
+//React Router
 import { HashRouter, Switch, Route, Redirect, Link } from "react-router-dom";
 //Material UI
 import clsx from "clsx";
@@ -27,6 +27,8 @@ import ProducerDisplay from "./ProducerDisplay.jsx";
 import ConsumerDisplay from "./ConsumerDisplay.jsx";
 import NetworkDisplay from "./NetworkDisplay.jsx";
 import UnderConstruction from "./UnderConstruction.jsx";
+//Logo
+import Logo from "../images/monokl_white.svg";
 
 const drawerWidth = 240;
 
@@ -99,7 +101,6 @@ const useStyles = makeStyles((theme) => ({
 
 const mapStateToProps = (state) => ({
   port: state.mainReducer.port,
-  data: state.mainReducer.data
 });
 
 function Sidebar(props) {
@@ -136,9 +137,10 @@ function Sidebar(props) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h5" noWrap>
-            Monokl
-          </Typography>
+          <Logo />
+          {/* <Typography variant="h5" noWrap>
+            <img src={Logo}/>
+          </Typography> */}
         </Toolbar>
       </AppBar>
       <HashRouter>
@@ -166,68 +168,84 @@ function Sidebar(props) {
           </div>
           <Divider />
           <List>
-            <ListItem button key={"Connect"} component={Link} to="/">
+            <ListItem button key={"Connection"} component={Link} to="/">
               <ListItemIcon>{<ConnectIcon />}</ListItemIcon>
-              <ListItemText primary={"Connect"} />
+              <ListItemText primary={"Connection"} />
             </ListItem>
-            <ListItem
-              button
-              key={"Alerts"}
-              component={Link}
-              to="/alerts"
-            >
-              <ListItemIcon>{<AlertIcon />}</ListItemIcon>
-              <ListItemText primary={"Alerts"} />
-            </ListItem>
-            <ListItem
-              button
-              key={"Broker Metrics"}
-              component={Link}
-              to="/broker"
-            >
-              <ListItemIcon>{<BrokerIcon />}</ListItemIcon>
-              <ListItemText primary={"Broker Metrics"} />
-            </ListItem>
-            <ListItem
-              button
-              key={"Producer Metrics"}
-              component={Link}
-              to="/producer"
-            >
-              <ListItemIcon>{<ProducerIcon />}</ListItemIcon>
-              <ListItemText primary={"Producer Metrics"} />
-            </ListItem>
-            <ListItem
-              button
-              key={"Consumer Metrics"}
-              component={Link}
-              to="/consumer"
-            >
-              <ListItemIcon>{<ConsumerIcon />}</ListItemIcon>
-              <ListItemText primary={"Consumer Metrics"} />
-            </ListItem>
-            <ListItem
-              button
-              key={"Network Metrics"}
-              component={Link}
-              to="/network"
-            >
-              <ListItemIcon>{<NetworkIcon />}</ListItemIcon>
-              <ListItemText primary={"Network Metrics"} />
-            </ListItem>
+            {(() => {
+              if (props.port) {
+                return (
+                  <>
+                    <ListItem
+                      button
+                      key={"Alerts"}
+                      component={Link}
+                      to="/alerts"
+                    >
+                      <ListItemIcon>{<AlertIcon />}</ListItemIcon>
+                      <ListItemText primary={"Alerts"} />
+                    </ListItem>
+                    <ListItem
+                      button
+                      key={"Broker Metrics"}
+                      component={Link}
+                      to="/broker"
+                    >
+                      <ListItemIcon>{<BrokerIcon />}</ListItemIcon>
+                      <ListItemText primary={"Broker Metrics"} />
+                    </ListItem>
+                    <ListItem
+                      button
+                      key={"Producer Metrics"}
+                      component={Link}
+                      to="/producer"
+                    >
+                      <ListItemIcon>{<ProducerIcon />}</ListItemIcon>
+                      <ListItemText primary={"Producer Metrics"} />
+                    </ListItem>
+                    <ListItem
+                      button
+                      key={"Consumer Metrics"}
+                      component={Link}
+                      to="/consumer"
+                    >
+                      <ListItemIcon>{<ConsumerIcon />}</ListItemIcon>
+                      <ListItemText primary={"Consumer Metrics"} />
+                    </ListItem>
+                    <ListItem
+                      button
+                      key={"Network Metrics"}
+                      component={Link}
+                      to="/network"
+                    >
+                      <ListItemIcon>{<NetworkIcon />}</ListItemIcon>
+                      <ListItemText primary={"Network Metrics"} />
+                    </ListItem>
+                  </>
+                );
+              }
+            })()}
           </List>
           <Divider />
-          <List className={classes.alertSettings}>
-            <ListItem
-              button
-              key={"Alert Settings"}
-              component={Link}
-              to="/settings"
-            >
-              <ListItemIcon>{<AlertSettingsIcon />}</ListItemIcon>
-              <ListItemText primary={"Alert Settings"} />
-            </ListItem>
-          </List>
+          {(() => {
+            if (props.port) {
+              return (
+                <>
+                  <List className={classes.alertSettings}>
+                    <ListItem
+                      button
+                      key={"Alert Settings"}
+                      component={Link}
+                      to="/settings"
+                    >
+                      <ListItemIcon>{<AlertSettingsIcon />}</ListItemIcon>
+                      <ListItemText primary={"Alert Settings"} />
+                    </ListItem>
+                  </List>
+                </>
+              );
+            }
+          })()}
         </Drawer>
         <main className={classes.content}>
           <Switch>

@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    marginTop: "150px",
+    marginTop: "185px",
     "& .MuiTextField-root": {
       margin: theme.spacing(1),
       width: "35ch",
@@ -63,7 +63,6 @@ function ConnectCluster(props) {
 
   return (
     <>
-      <h5>Port: {props.port} </h5>
       <form className={classes.root} noValidate autoComplete="off">
         {attempts > 0 ? <PortAlert /> : <></> }
         <TextField
