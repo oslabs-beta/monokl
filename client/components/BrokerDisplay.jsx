@@ -12,14 +12,20 @@ import { timeFunction } from "./timeFunction.js";
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
+    flexDirection: 'column',
     flexGrow: "1",
-    marginTop: "50px",
     alignItems: "center",
+  },
+  title: {
+    color: "rgba(0, 0, 0, 0.54)",
+    fontSize: "42px",
+    fontWeight: "bold",
   },
   paper: {
     padding: theme.spacing(2),
     textAlign: "center",
     color: theme.palette.text.secondary,
+    minHeight: "180px"
   },
 }));
 
@@ -142,10 +148,8 @@ function BrokerDisplay(props) {
   return (
     <>
       <div className={classes.root}>
+        <p className={classes.title}>Broker Metrics</p>
         <Grid container spacing={3} className={classes.parent}>
-          <Grid item xs={12}>
-            Broker Metrics
-          </Grid>
           {/* 1. Under Replicated Partitions */}
           <Grid item xs={4} className={classes.child}>
             <Paper className={classes.paper}>

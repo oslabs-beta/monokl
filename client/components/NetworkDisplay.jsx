@@ -13,9 +13,14 @@ import { timeFunction } from "./timeFunction.js";
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
+    flexDirection: 'column',
     flexGrow: "1",
-    marginTop: "50px",
     alignItems: "center",
+  },
+  title: {
+    color: "rgba(0, 0, 0, 0.54)",
+    fontSize: "42px",
+    fontWeight: "bold",
   },
   paper: {
     padding: theme.spacing(2),
@@ -67,10 +72,8 @@ function NetworkDisplay(props) {
 
     return (
       <div className={classes.root}>
+        <p className={classes.title}>Network Metrics</p>
         <Grid container spacing={3} className={classes.parent}>
-          <Grid item xs={12}>
-            Network Metrics
-          </Grid>
           {/* 1. network Processor Avg Idle Percentage */}
           <Grid item xs={12} className={classes.child}>
             <Paper className={classes.paper}>
