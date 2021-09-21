@@ -11,8 +11,6 @@ import ScoreCard from "./charts/ScoreCard.jsx";
 //Time Function
 import { timeFunction } from "./timeFunction.js";
 
-
-
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
