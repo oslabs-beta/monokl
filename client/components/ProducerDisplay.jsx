@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
+//Material UI - Core
+import {Paper, Grid } from "@material-ui/core"
+//Material UI - Styles
 import { makeStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
-import Grid from "@material-ui/core/Grid";
-import BarChart from "./charts/BarChart.jsx";
+//Application Chart Components 
 import LineChart from "./charts/LineChart.jsx";
 import MultipleLineChart from "./charts/MultipleLineChart.jsx";
 import ScoreCard from "./charts/ScoreCard.jsx";
-import { connect } from "react-redux";
+//Time Function
+import { timeFunction } from "./timeFunction.js";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -31,7 +34,8 @@ const mapStateToProps = (state) => {
 };
 
 function ProducerDisplay(props) {
-
+  const classes = useStyles();
+  // component state properties for each charts x and y axis
   const [xArray50, setXArray] = useState([]);
   const [yArray50, setYArray50] = useState([]);
   const [yArray75, setYArray75] = useState([]);
@@ -42,50 +46,51 @@ function ProducerDisplay(props) {
   const [xFailedProducerRequest, setXArrayFailedProducerRequest] = useState([]);
   const [yFailedProducerRequest, setYArrayFailedProducerRequest] = useState([]);
 
+  //calculate the interval
+  let interval = timeFunction(props.connectionTime);
+  
   useEffect(() => {
-      //0.Total Time (Range) //{request="Produce"}- this measures number of Produce requests that were measured since the broker went up
+    //1. Total Time for Producer Requests
     let totalTimeMs = fetch(
-      `http://localhost:${props.port}/api/v1/query_range?query=kafka_network_requestmetrics_totaltimems{request="Produce"}&start=${props.connectionTime}&end=${new Date().toISOString()}&step=60s`
+      `http://localhost:${props.port}/api/v1/query_range?query=kafka_network_requestmetrics_totaltimems{request="Produce"}&start=${props.connectionTime}&end=${new Date().toISOString()}&step=${interval.toString()}s`
     ).then((respose) => respose.json());
   
-    //1. Total Producer Requests Total (Aggregate)
+    //2. Total Producer Requests= (Aggregate)
     let producerReqsTotal = fetch(
-      `http://localhost:${props.port}/api/v1/query_range?query=kafka_server_brokertopicmetrics_totalproducerequests_total&start=${props.connectionTime}&end=${new Date().toISOString()}&step=60s`
+      `http://localhost:${props.port}/api/v1/query_range?query=kafka_server_brokertopicmetrics_totalproducerequests_total&start=${props.connectionTime}&end=${new Date().toISOString()}&step=${interval.toString()}s`
     ).then((respose) => respose.json());
   
-    //2. Failed Producer Requests (Aggregate)
+    //3. Failed Producer Requests (Aggregate)
     let failedProducerReqs = fetch(
-      `http://localhost:${props.port}/api/v1/query_range?query=kafka_server_brokertopicmetrics_failedproducerequests_total&start=${props.connectionTime}&end=${new Date().toISOString()}&step=60s`
+      `http://localhost:${props.port}/api/v1/query_range?query=kafka_server_brokertopicmetrics_failedproducerequests_total&start=${props.connectionTime}&end=${new Date().toISOString()}&step=${interval.toString()}s`
     ).then((respose) => respose.json());
   
     Promise.all([totalTimeMs, producerReqsTotal, failedProducerReqs])
-    .then((allData) => {
-        // Total Time in ms Chart
+      .then((allData) => {
+        //1. Total Time in Ms for Producer Requests
         setXArray(allData[0].data.result[0].values.map((data) => {
-          let date = new Date(data[0]);
-          return date.getTime();
+          let date = new Date(data[0] * 1000);
+          return date.toLocaleTimeString('en-GB');
         }))
         setYArray50(allData[0].data.result[0].values.map((data) => Number(data[1])))
         setYArray75(allData[0].data.result[1].values.map((data) => Number(data[1])))
         setYArray95(allData[0].data.result[2].values.map((data) => Number(data[1])))
         setYArray99(allData[0].data.result[4].values.map((data) => Number(data[1])))
-        // Total Producer Requests Chart
+        //2. Total Producer Requests Chart
         setXArrayTotalProducer(allData[1].data.result[0].values.map((data) => {
-          let date = new Date(data[0]);
-          return date.getTime();
+          let date = new Date(data[0] * 1000);
+          return date.toLocaleTimeString('en-GB');
         }))
         setYArrayTotalProducer(allData[1].data.result[0].values.map((data)=> Number(data[1])))
-        // Failed Producer Requests Chart
+        //3. Failed Producer Requests Chart
         setXArrayFailedProducerRequest(allData[2].data.result[0].values.map((data) => {
-          let date = new Date(data[0]);
-          return date.getTime();
+          let date = new Date(data[0] * 1000);
+          return date.toLocaleTimeString('en-GB');
         }))
         setYArrayFailedProducerRequest(allData[2].data.result[0].values.map((data) => Number(data[1])))
       })
-      .catch(console.error);
+      .catch(err => console.log(err));
   }, []);
-
-  const classes = useStyles();
 
   return (
     <div className={classes.root}>
@@ -93,7 +98,7 @@ function ProducerDisplay(props) {
         <Grid item xs={12}>
           Producer Metrics
         </Grid>
-
+        {/* 1. Total Time for Producer Requests */}
         <Grid item xs={12} className={classes.child}>
           <Paper className={classes.paper}>
             <MultipleLineChart
@@ -103,7 +108,7 @@ function ProducerDisplay(props) {
                 "Quantile 95",
                 "Quantile 99",
               ]}
-              metricName={"Total Time ms Produce"}
+              metricName={"Producer Request Time in Ms"}
               xtime={xArray50}
               y50={yArray50}
               y75={yArray75}
@@ -112,19 +117,23 @@ function ProducerDisplay(props) {
             />
           </Paper>
         </Grid>
+        {/* Total Producer Requests */}
         <Grid item xs={12} className={classes.child}>
           <Paper className={classes.paper}>
             <LineChart
               metricName={"Total Producer Requests (Aggregate)"}
+              label={'Request Total'}
               x={xArrayTotalProducer}
               y={yArrayTotalProducer}
             />
           </Paper>
         </Grid>
+        {/* Failed Producer Requests */}
         <Grid item xs={12} className={classes.child}>
           <Paper className={classes.paper}>
             <LineChart
               metricName={"Failed Producer Requests"}
+              label={"Failed Request Total"}
               x={xFailedProducerRequest}
               y={yFailedProducerRequest}
             />

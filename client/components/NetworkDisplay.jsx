@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { fetchNetworkMetrics } from "../actions/actions.js";
-import { makeStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
-import Grid from "@material-ui/core/Grid";
-import BarChart from "./charts/BarChart.jsx";
-import LineChart from "./charts/LineChart.jsx";
-import ScoreCard from "./charts/ScoreCard.jsx";
 import { connect } from "react-redux";
+import { makeStyles } from "@material-ui/core/styles";
+//Material UI - Core
+import {Paper, Grid } from "@material-ui/core"
+//Application Chart Components 
+import LineChart from "./charts/LineChart.jsx";
+//Time Function
+import { timeFunction } from "./timeFunction.js";
+
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -38,27 +40,30 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 function NetworkDisplay(props) {
-
+  const classes = useStyles();
+  // component state properties chart x and y axis
   const [xArrayIdle, setXArray] = useState([]);
   const [yArrayIdle, setYArray] = useState([]);
 
+  //calculate the interval
+  let interval = timeFunction(props.connectionTime);
+
   useEffect(() => {
     fetch(
-      `http://localhost:${props.port}/api/v1/query_range?query=kafka_network_socketserver_networkprocessoravgidlepercent&start=${props.connectionTime}&end=${new Date().toISOString()}&step=60s`
+      `http://localhost:${props.port}/api/v1/query_range?query=kafka_network_socketserver_networkprocessoravgidlepercent&start=${props.connectionTime}&end=${new Date().toISOString()}&step=${interval.toString()}s`
     )
     .then((response) => response.json())
     .then((res)=>{
+      //1. Network Processor Avg Idle Percentage
       setXArray(res.data.result[0].values.map((data) => {
-        let date = new Date(data[0]);
-        return date.getTime()})
-      )
+        let date = new Date(data[0] * 1000);
+        return date.toLocaleTimeString('en-GB');
+      }))
       setYArray(res.data.result[0].values.map((data) => Number(data[1])))
       console.log('this is x and y array: ', setXArray, setYArray)
     })
-    .catch(console.error)
+    .catch(err => console.log(err))
   }, []);
-
-  const classes = useStyles();
 
     return (
       <div className={classes.root}>
@@ -66,11 +71,12 @@ function NetworkDisplay(props) {
           <Grid item xs={12}>
             Network Metrics
           </Grid>
-
+          {/* 1. network Processor Avg Idle Percentage */}
           <Grid item xs={12} className={classes.child}>
             <Paper className={classes.paper}>
               <LineChart
-                metricName={"Network processor average idle percent"}
+                metricName={"Network Processor"}
+                label={"Average Idle Percentage"}
                 x={xArrayIdle}
                 y={yArrayIdle}
               />

@@ -32,21 +32,13 @@ const options = {
   maintainAspectRatio: false
 }
 
-
-
 const BarChart = (props) => {
-  // fetch("http://localhost:9090/api/v1/query?query=process_cpu_seconds_total")
-  //   .then((res) => res.json())
-  //   .then((data) => console.log(data));
-
   return (
     <>
       <h1>{props.metricName}</h1>
       <div className="chartDiv">
         <Bar
           data={data}
-          // height={100}
-          // width={200}
           options={options}
         />
       </div>

@@ -1,23 +1,15 @@
 import React from "react";
-import { HashRouter, Switch, Route, Redirect, Link } from "react-router-dom";
 import { connect } from "react-redux";
-// import { fetchBrokerMetrics, fetchProducerMetrics, fetchConsumerMetrics, fetchNetworkMetrics } from "../actions/actions.js";
+//React Router 
+import { HashRouter, Switch, Route, Redirect, Link } from "react-router-dom";
+//Material UI
 import clsx from "clsx";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
-import Drawer from "@material-ui/core/Drawer";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import List from "@material-ui/core/List";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import Typography from "@material-ui/core/Typography";
-import Divider from "@material-ui/core/Divider";
-import IconButton from "@material-ui/core/IconButton";
+//Material UI Components - Core
+import { Drawer, AppBar, Toolbar, List, CssBaseline, Typography, Divider, IconButton, ListItem, ListItemIcon, ListItemText } from "@material-ui/core"
+//Material UI Icons
 import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
 import ConnectIcon from "@material-ui/icons/SettingsEthernetOutlined";
 import AlertIcon from "@material-ui/icons/ErrorOutlineOutlined";
 import BrokerIcon from '@mui/icons-material/OpenWithOutlined';
@@ -25,7 +17,9 @@ import ProducerIcon from '@mui/icons-material/StoreOutlined';
 import ConsumerIcon from '@mui/icons-material/ShoppingBagOutlined';
 import NetworkIcon from "@material-ui/icons/NetworkCheckOutlined";
 import AlertSettingsIcon from "@material-ui/icons/SettingsApplicationsOutlined";
-
+//Material UI - Styles
+import { makeStyles, useTheme } from "@material-ui/core/styles";
+//Application Components
 import ConnectCluster from "./ConnectCluster.jsx";
 import DisconnectCluster from "./DisconnectCluster.jsx";
 import BrokerDisplay from "./BrokerDisplay.jsx";
@@ -96,42 +90,17 @@ const useStyles = makeStyles((theme) => ({
     ...theme.mixins.toolbar,
   },
   content: {
-    // backgroundColor: 'lightgreen',
     flexGrow: "1",
     padding: theme.spacing(3),
     marginTop: "50px",
     minWidth: "380px",
-  },
-  alertSettings: {
-    // margin: theme.spacing.unit,
-    // position: "fixed",
-    // marginBottom: 'auto',
-    // bottom: theme.spacing(2),
-    // left: theme.spacing(2)
-  },
+  }
 }));
 
 const mapStateToProps = (state) => ({
   port: state.mainReducer.port,
   data: state.mainReducer.data
 });
-
-// const mapDispatchToProps = (dispatch) => {
-//   return {
-//     fetchBrokerMetrics: () => {
-//       dispatch(fetchBrokerMetrics());
-//     },
-//     fetchProducerMetrics: () => {
-//       dispatch(fetchProducerMetrics());
-//     },
-//     fetchConsumerMetrics: () => {
-//       dispatch(fetchConsumerMetrics());
-//     },
-//     fetchNetworkMetrics: () => {
-//       dispatch(fetchNetworkMetrics());
-//     },
-//   };
-// };
 
 function Sidebar(props) {
   const classes = useStyles();
@@ -206,9 +175,6 @@ function Sidebar(props) {
               key={"Alerts"}
               component={Link}
               to="/alerts"
-              onClick={() => {
-                console.log("Hello from Alerts menu");
-              }}
             >
               <ListItemIcon>{<AlertIcon />}</ListItemIcon>
               <ListItemText primary={"Alerts"} />
@@ -216,7 +182,6 @@ function Sidebar(props) {
             <ListItem
               button
               key={"Broker Metrics"}
-              // onClick={async () => await props.fetchBrokerMetrics()}
               component={Link}
               to="/broker"
             >
@@ -244,7 +209,6 @@ function Sidebar(props) {
             <ListItem
               button
               key={"Network Metrics"}
-              // onClick={props.fetchNetworkMetrics}
               component={Link}
               to="/network"
             >
@@ -257,9 +221,6 @@ function Sidebar(props) {
             <ListItem
               button
               key={"Alert Settings"}
-              onClick={() => {
-                console.log("Hello");
-              }}
               component={Link}
               to="/settings"
             >

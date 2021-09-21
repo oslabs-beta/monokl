@@ -1,14 +1,12 @@
 import React from "react";
 import { Line } from "react-chartjs-2";
 
-//import state variable
-
 const LineChart = (props) => {
   const data = {
     labels: props.x,
     datasets: [
       {
-        label: "# of Responses",
+        label: props.label,
         data: props.y,
         fill: false,
         backgroundColor: "#018790",

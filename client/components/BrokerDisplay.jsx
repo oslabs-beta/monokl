@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
-import Grid from "@material-ui/core/Grid";
-import BarChart from "./charts/BarChart.jsx";
+import { connect } from "react-redux";
+//Material UI - Core
+import {Paper, Grid } from "@material-ui/core"
+//Chart Components
 import LineChart from "./charts/LineChart.jsx";
 import ScoreCard from "./charts/ScoreCard.jsx";
-import { connect } from "react-redux";
+//Time Function
+import { timeFunction } from "./timeFunction.js";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,8 +23,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-//after getting data and storing it in state..
-//use a mapstatetoprops to pass data to both line charts
 const mapStateToProps = (state) => {
   return {
     port: state.mainReducer.port,
@@ -32,7 +32,7 @@ const mapStateToProps = (state) => {
 
 function BrokerDisplay(props) {
   const classes = useStyles();
-
+  // component state properties for each charts x and y axis
   const [underReplicatedPartitions, setURP] = useState([]);
   const [activeControllerCount, setActiveController] = useState([]);
   const [offlinePartitions, setOfflinePartitions] = useState([]);
@@ -47,130 +47,96 @@ function BrokerDisplay(props) {
   const [xArrayOut, setXArrayOut] = useState([]);
   const [yArrayOut, setYArrayOut] = useState([]);
 
-  // //Leader Election Rate
-  // const xArrayLeader = props.leaderElectionRateAndTimeMs.map((data) => {
-  //   let date = new Date(data[0]);
-  //   return date.getTime();
-  // });
-  // const yArrayLeader = props.leaderElectionRateAndTimeMs.map((data) =>
-  //   Number(data[1])
-  // );
-  // //Total Time Fetch
-  // const xArrayTTFetch = props.totalTimeMS.data.result[0].values.map((data) => {
-  //   let date = new Date(data[0]);
-  //   return date.getTime();
-  // });
-  // const yArrayTTFetch = props.totalTimeMS.data.result[0].values.map((data) =>
-  //   Number(data[1])
-  // );
-
-  // //Purgatory Fetch
-  // const xArrayPurg = props.purgatorySize.map((data) => {
-  //   let date = new Date(data[0]);
-  //   return date.getTime();
-  // });
-  // const yArrayPurg = props.purgatorySize.map((data) => Number(data[1]));
-  
-  // //Bytes In
-  // const xArray = props.bytesIn.map((data) => {
-  //   let date = new Date(data[0]);
-  //   return date.getTime();
-  // });
-  // const yArray = props.bytesIn.map((data) => Number(data[1]));
-
-  // //bytesOut
-  // const xArrayOut = props.bytesOut.map((data) => {
-  //   let date = new Date(data[0]);
-  //   return date.getTime();
-  // });
-  // const yArrayOut = props.bytesOut.map((data) => Number(data[1]));
+ //calculate the interval
+ let interval = timeFunction(props.connectionTime);
 
   useEffect(() => {
+    //1. Under Replicated Partitions Count (Score Card)
     let underReplicated = fetch(
       `http://localhost:${props.port}/api/v1/query?query=kafka_server_replicamanager_underreplicatedpartitions`
     ).then((respose) => respose.json());
   
-    //1.Active Controller Count(Score Card)
+    //2. Active Controller Count (Score Card)
     let activeController = fetch(
       `http://localhost:${props.port}/api/v1/query?query=kafka_controller_kafkacontroller_activecontrollercount`
     ).then((respose) => respose.json());
   
-    //2.Offline Partitions Count (Score Card)
+    //3. Offline Partitions Count (Score Card)
     let offlinePartitions = fetch(
       `http://localhost:${props.port}/api/v1/query?query=kafka_controller_kafkacontroller_offlinepartitionscount`
     ).then((respose) => respose.json());
   
-    //3.Leader Election Rate and Time Ms (Range)
+    //4. Leader Election Rate and Time Ms
     let leaderElectionRateMs = fetch(
-      `http://localhost:${props.port}/api/v1/query_range?query=kafka_controller_controllerstats_leaderelectionrateandtimems_count&start=${props.connectionTime}&end=${new Date().toISOString()}&step=60s`
+      `http://localhost:${props.port}/api/v1/query_range?query=kafka_controller_controllerstats_leaderelectionrateandtimems_count&start=${props.connectionTime}&end=${new Date().toISOString()}&step=${interval.toString()}s`
     ).then((respose) => respose.json());
   
-    //4.Total Time (Range) //{request=""FetchConsumer"}
+    //5. Fetch Consumer Total Time
     let fetchConsumerTime = fetch(
-      `http://localhost:${props.port}/api/v1/query_range?query=kafka_network_requestmetrics_totaltimems{request="FetchConsumer"}&start=${props.connectionTime}&end=${new Date().toISOString()}&step=60s`
+      `http://localhost:${props.port}/api/v1/query_range?query=kafka_network_requestmetrics_totaltimems{request="FetchConsumer"}&start=${props.connectionTime}&end=${new Date().toISOString()}&step=${interval.toString()}s`
     ).then((respose) => respose.json());
   
-    //5.Purgatory Size (Range) {delayedOperation="Fetch"}
+    //6. Purgatory Size
     let purgatorySizeFetch = fetch(
-      `http://localhost:${props.port}/api/v1/query_range?query=kafka_server_delayedoperationpurgatory_purgatorysize{delayedOperation="Fetch"}&start=${props.connectionTime}&end=${new Date().toISOString()}&step=60s`
+      `http://localhost:${props.port}/api/v1/query_range?query=kafka_server_delayedoperationpurgatory_purgatorysize{delayedOperation="Fetch"}&start=${props.connectionTime}&end=${new Date().toISOString()}&step=${interval.toString()}s`
     ).then((respose) => respose.json());
   
-    //6.Bytes In Total (Range)
+    //7. Bytes In Total (Range)
     let bytesIn = fetch(
-      `http://localhost:${props.port}/api/v1/query_range?query=kafka_server_brokertopicmetrics_bytesin_total&start=${props.connectionTime}&end=${new Date().toISOString()}&step=60s`
+      `http://localhost:${props.port}/api/v1/query_range?query=kafka_server_brokertopicmetrics_bytesin_total&start=${props.connectionTime}&end=${new Date().toISOString()}&step=${interval.toString()}s`
     ).then((respose) => respose.json());
-    //7.BytesOut Total(Range)
+    //8. Bytes Out Total (Range)
     let bytesOut = fetch(
-      `http://localhost:${props.port}/api/v1/query_range?query=kafka_server_brokertopicmetrics_bytesout_total&start=${props.connectionTime}&end=${new Date().toISOString()}&step=60s`
+      `http://localhost:${props.port}/api/v1/query_range?query=kafka_server_brokertopicmetrics_bytesout_total&start=${props.connectionTime}&end=${new Date().toISOString()}&step=${interval.toString()}s`
     ).then((respose) => respose.json());
 
     Promise.all([underReplicated, activeController, offlinePartitions, leaderElectionRateMs, fetchConsumerTime, purgatorySizeFetch, bytesIn, bytesOut])
       .then((allData) => {
-        // Under Replicated Partitions Chart
+        //1. Under Replicated Partitions Chart
         setURP(allData[0].data.result[0].value[1])
         
-        // Active Controller Count Chart
+        //2. Active Controller Count Chart
         setActiveController(allData[1].data.result[0].value[1])
         
-        // Offline Partitions Count Chart
+        //3. Offline Partitions Count Chart
         setOfflinePartitions(allData[2].data.result[0].value[1])
         
-        // Leader Election Rate Ms Chart
+        //4. Leader Election Rate Ms Chart
         setXArrayLeader(allData[3].data.result[0].values.map((data) => {
-          let date = new Date(data[0]);
-          return date.getTime()
+          let date = new Date(data[0] * 1000);
+          return date.toLocaleTimeString('en-GB');
         }))
         setYArrayLeader(allData[3].data.result[0].values.map((data) => Number(data[1])))
         
-        // Fetch Consumer Time Chart
+        //5. Fetch Consumer Time Chart
         setXArrayTTFetch(allData[4].data.result[0].values.map((data) => {
-          let date = new Date(data[0]);
-          return date.getTime();
+          let date = new Date(data[0] * 1000);
+          return date.toLocaleTimeString('en-GB');
         }));
         setYArrayTTFetch(allData[4].data.result[0].values.map((data) => Number(data[1])));
 
-        // Purgatory Size Chart
+        //6. Purgatory Size Chart
         setXArrayPurg(allData[5].data.result[0].values.map((data) => {
-          let date = new Date(data[0]);
-          return date.getTime();
+          let date = new Date(data[0] * 1000);
+          return date.toLocaleTimeString('en-GB');
         }));
         setYArrayPurg(allData[5].data.result[0].values.map((data) => Number(data[1])));
 
-        // Bytes In Chart
+        //7. Bytes In Chart
         setXArrayIn(allData[6].data.result[0].values.map((data) => {
-          let date = new Date(data[0]);
-          return date.getTime();
+          let date = new Date(data[0] * 1000);
+          return date.toLocaleTimeString('en-GB');
         }));
         setYArrayIn(allData[6].data.result[0].values.map((data) => Number(data[1])));
 
-        // Bytes Out Chart
+        //8. Bytes Out Chart
         setXArrayOut(allData[7].data.result[0].values.map((data) => {
-          let date = new Date(data[0]);
-          return date.getTime();
+          let date = new Date(data[0] * 1000);
+          return date.toLocaleTimeString('en-GB');
         }));
         setYArrayOut(allData[7].data.result[0].values.map((data) => Number(data[1])));
       })
-      .catch(console.error)
+      .catch(err => console.log(err))
   }, [])
 
   return (
@@ -180,7 +146,7 @@ function BrokerDisplay(props) {
           <Grid item xs={12}>
             Broker Metrics
           </Grid>
-          {/* Metric 0: "Under Replicated Partitions" */}
+          {/* 1. Under Replicated Partitions */}
           <Grid item xs={4} className={classes.child}>
             <Paper className={classes.paper}>
               <ScoreCard
@@ -189,7 +155,7 @@ function BrokerDisplay(props) {
               />
             </Paper>
           </Grid>
-          {/* Metric 1: "Active Controller Count" */}
+          {/* 2. Active Controller Count */}
           <Grid item xs={4} className={classes.child}>
             <Paper className={classes.paper}>
               <ScoreCard
@@ -198,7 +164,7 @@ function BrokerDisplay(props) {
               />
             </Paper>
           </Grid>
-          {/* Metric 2: "Offline Partition Count" */}
+          {/* 3. Offline Partition Count */}
           <Grid item xs={4} className={classes.child}>
             <Paper className={classes.paper}>
               <ScoreCard
@@ -207,76 +173,63 @@ function BrokerDisplay(props) {
               />
             </Paper>
           </Grid>
-          {/* Metric 3: "Leader Election Rate and Time Ms" */}
+          {/* 4. Leader Election Rate and Time Ms */}
           <Grid item xs={12} className={classes.child}>
             <Paper className={classes.paper}>
               <LineChart
                 metricName={"Leader Election Rate and Time Ms"}
+                label={'Rate per Millisecond'}
                 x={xArrayLeader}
                 y={yArrayLeader}
               />
             </Paper>
           </Grid>
-          {/* Metric4: "Total Time Ms" FetchConsumer  50th quartile*/}
+          {/* 5. Fetch Consumer Time - 50th quantile*/}
           <Grid item xs={12} className={classes.child}>
             <Paper className={classes.paper}>
               <LineChart
-                metricName={"Total Time Ms FetchConsumer 50th"}
+                metricName={"Fetch Consumer Request Time Ms"}
+                label={'Rate per Millisecond'}
                 x={xArrayTTFetch}
                 y={yArrayTTFetch}
               />
             </Paper>
           </Grid>
-          {/* Metric5: "Purgatory Size" */}
+          {/* 6. Purgatory Size */}
           <Grid item xs={12} className={classes.child}>
             <Paper className={classes.paper}>
               <LineChart
-                metricName={"Purgatory Size Fetch Request"}
+                metricName={"Fetch Request Purgatory Size"}
+                label={'Rate per Millisecond'}
                 x={xArrayPurg}
                 y={yArrayPurg}
               />
             </Paper>
           </Grid>
-          {/* Metric6: "Bytes In Per Sec" */}
+          {/* 7. Bytes In */}
           <Grid item xs={6} className={classes.child}>
             <Paper className={classes.paper}>
               <LineChart
                 metricName={"Bytes In Per Sec"}
+                label={'Rate per Second'}
                 x={xArrayIn}
                 y={yArrayIn}
               />
             </Paper>
           </Grid>
-          {/* Metric7: "Bytes Out Per Sec" */}
+          {/* 8. Bytes Out */}
           <Grid item xs={6} className={classes.child}>
             <Paper className={classes.paper}>
               <LineChart
                 metricName={"Bytes Out Per Sec"}
+                label={'Rate per Second'}
                 x={xArrayOut}
                 y={yArrayOut}
               />
             </Paper>
-          </Grid>
-
-          {/* <Grid item xs={12} className={classes.child}>
-            <Paper className={classes.paper}>
-              <BarChart metricName={"Requests Per Sec"} />
-            </Paper>
-          </Grid> */}
+          </Grid> 
         </Grid>
       </div>
-      {/* <div>
-        Bytes In Array: {JSON.stringify(props.bytesIn.data.result[0].value)}
-      </div> */}
-      {/* <div>Bytes In Array: {props.bytesIn}</div> */}
-      {/* <div>
-        Under Replicated partitions:{" "}
-        {JSON.stringify(props.underReplicatedPartitions)}
-      </div> */}
-      {/* <div>
-        Under Replicated partitions:{" "}
-        {props.underReplicatedPartitions}
-      </div> */}
     </>
   );
 }

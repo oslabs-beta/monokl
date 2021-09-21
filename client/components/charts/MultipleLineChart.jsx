@@ -1,8 +1,6 @@
 import React from "react";
 import { Line } from "react-chartjs-2";
 
-//import state variable
-
 const MultipleLineChart = (props) => {
   const data = {
     labels: props.xtime,
