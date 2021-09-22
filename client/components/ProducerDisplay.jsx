@@ -15,8 +15,13 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     flexGrow: "1",
-    marginTop: "50px",
+    flexDirection: "column",
     alignItems: "center",
+  },
+  title: {
+    color: "rgba(0, 0, 0, 0.54)",
+    fontSize: "42px",
+    fontWeight: "bold",
   },
   paper: {
     padding: theme.spacing(2),
@@ -94,11 +99,9 @@ function ProducerDisplay(props) {
 
   return (
     <div className={classes.root}>
+      <p className={classes.title}>Producer Metrics</p>
       <Grid container spacing={3} className={classes.parent}>
-        <Grid item xs={12}>
-          Producer Metrics
-        </Grid>
-        {/* 1. Total Time for Producer Requests */}
+       {/* 1. Total Time for Producer Requests */}
         <Grid item xs={12} className={classes.child}>
           <Paper className={classes.paper}>
             <MultipleLineChart
