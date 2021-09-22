@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron .",
-    "watch": "webpack --config webpack.config.js --watch"
+    "watch": "webpack --config webpack.config.js --watch",
+    "pack": "electron-builder -nwl"
   },
   "keywords": [],
   "author": "",
@@ -38,11 +39,60 @@
     "@svgr/webpack": "^5.5.0",
     "babel-loader": "^8.2.2",
     "css-loader": "^6.2.0",
+    "electron-builder": "^22.11.7",
     "electron-reload": "^2.0.0-alpha.1",
     "sass": "^1.38.2",
     "sass-loader": "^12.1.0",
     "style-loader": "^3.2.1",
     "webpack": "^5.51.1",
     "webpack-cli": "^4.8.0"
+  },
+  "build": {
+    "appId": "com.oslabs.monokl",
+    "productName": "monokl",
+    "copyright": "wes tyler savitri",
+    "directories": {
+      "app": ".",
+      "output": "dist",
+      "buildResources": "icon"
+    },
+    "files": [
+      "package.json",
+      "app/**/*",
+      "node_modules",
+      "!app/README.md",
+      "!.gitignore"
+    ],
+    "dmg": {
+      "background": null,
+      "backgroundColor": "#ffffff",
+      "window": {
+        "width": "400",
+        "height": "300"
+      },
+      "contents": [
+        {
+          "x": 100,
+          "y": 100
+        },
+        {
+          "x": 300,
+          "y": 100,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    },
+    "mac": {
+      "target": "dmg",
+      "category": "public.app-category.utilities"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "linux": {
+      "target": "AppImage",
+      "category": "Utility"
+    }
   }
 }
