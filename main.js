@@ -14,6 +14,7 @@ function createWindow() {
   });
   win.loadFile("index.html");
 }
+//requried for developer environment, comment this require fuction out before packaging in Electron
 require("electron-reload")(__dirname, {
   electron: path.join(__dirname, "node_modules", ".bin", "electron"),
 });
