@@ -96,6 +96,10 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3),
     marginTop: "50px",
     minWidth: "380px",
+  },
+  logo: {
+    backgroundSize: "20px 30px",
+    marginTop: "8px"
   }
 }));
 
@@ -137,10 +141,8 @@ function Sidebar(props) {
           >
             <MenuIcon />
           </IconButton>
-          <Logo />
-          {/* <Typography variant="h5" noWrap>
-            <img src={Logo}/>
-          </Typography> */}
+          <Logo className={classes.logo}/>
+            {/* <img src={} width={"auto"} height={"50px"}/> */}
         </Toolbar>
       </AppBar>
       <HashRouter>
