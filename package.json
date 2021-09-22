@@ -1,7 +1,7 @@
 {
   "name": "monokl",
   "version": "1.0.0",
-  "description": "",
+  "description": "Monitoring and visualization tool for Apache Kafka",
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -21,7 +21,6 @@
     "@mui/material": "^5.0.0",
     "chart.js": "^3.5.1",
     "clsx": "^1.1.1",
-    "electron": "^13.2.3",
     "react": "^17.0.2",
     "react-chartjs-2": "^3.0.4",
     "react-dom": "^17.0.2",
@@ -39,6 +38,7 @@
     "@svgr/webpack": "^5.5.0",
     "babel-loader": "^8.2.2",
     "css-loader": "^6.2.0",
+    "electron": "^15.0.0",
     "electron-builder": "^22.11.7",
     "electron-reload": "^2.0.0-alpha.1",
     "sass": "^1.38.2",
@@ -58,9 +58,9 @@
     },
     "files": [
       "package.json",
-      "app/**/*",
+      "**/*",
       "node_modules",
-      "!app/README.md",
+      "!README.md",
       "!.gitignore"
     ],
     "dmg": {
