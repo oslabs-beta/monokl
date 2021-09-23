@@ -9,7 +9,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat"/>
   <img src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat"/>
-  <img alt="license" src="https://img.shields.io/github/license/oslabs-beta/monokl?color=%2357d3af">
+ <!-- <img alt="license" src="https://img.shields.io/github/license/oslabs-beta/monokl?color=%2357d3af"> -->
   <img alt="last commit" src="https://img.shields.io/github/last-commit/oslabs-beta/monokl?color=%2357d3af">
   <img alt="Repo stars" src="https://img.shields.io/github/stars/oslabs-beta/monokl?logoColor=%2334495e&style=social"> 
 </p>
@@ -21,8 +21,9 @@
 * [Demo](#demo)
 * [Installation](#installation)
 * [Engineering Team](#monokl-engineering-team)
+<!--
 * [License](#license)
-
+-->
 ## Features
 * ### User-friendly GUI
 * ### Insights into cluster brokers, producers, consumers, and network metrics
@@ -53,11 +54,12 @@
 </p>
 
 ## Monokl Engineering Team
-| [Wesley Mungal](https://github.com/lagnum22)
+ [Wesley Mungal](https://github.com/lagnum22)
 | [Savitri Beaver](https://github.com/savybeav)
 | [Tyler Holt](https://github.com/tylerprestonholt)
 
 We welcome contributions, so please feel free to fork, clone, and help monokl grow! Remember to leave a [![GitHub stars](https://img.shields.io/github/stars/oslabs-beta/monokl?style=social&label=Star&)](https://github.com/oslabs-beta/monokl/stargazers) if you'd like to support our work!
-
+<!--
 ## License
 Released under the MIT License
+-->
