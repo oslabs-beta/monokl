@@ -45,6 +45,11 @@
 
 
 ## Installation
+- To download our desktop application, please visit the releases and downlaod the appropriate file for your OS. (*Note: If you are using the desktop application, you may need to configure your privacy or security settings to allow the application to open without being verified.)
+- You can also clone the repository directly from GitHub and run these commands in your terminal:
+   1. npm install
+   2. npm run watch
+   3. npm start (in a separate terminal)
 - Monokl requires a Kafka Cluster configured with JMX and Prometheus to capture advanced metrics.
 - Enter the port number for Prometheus to verify connection
 - Select through various Displays for up to date chart information
@@ -63,3 +68,4 @@ We welcome contributions, so please feel free to fork, clone, and help monokl gr
 ## License
 Released under the MIT License
 -->
+
